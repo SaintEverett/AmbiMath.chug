@@ -8,29 +8,29 @@
 
 </div>
 
-# :notebook_with_decorative_cover: Table of Contents
+# Heplful sections:
 
-- [About the Project](#star2-about-the-project)
-- [FAQ](#grey_question-faq)
-- [License](#warning-license)
-- [Contact](#handshake-contact)
+- [About the Project]
+- [FAQ]
+- [License]
+- [Contact]
 
 
-## :star2: About the Project
+## About the Project
 
-### :dart: Features
+### Features
 - Up to 3rd order SN3D ambisonic coordinate systems.
 - Individual or all coordinates calculable at any time.
 
 
-## :toolbox: Getting Started
+## Getting Started
 
-### :bangbang: Prerequisites
+### Prerequisites
 
 - Install ChucK on your computer<a href="https://chuck.stanford.edu/"> Here</a>
 
 
-## :grey_question: FAQ
+## FAQ
 
 - How do I install this chugin?
 - Simply drop the chugin in your "chugins" folder within your ChucK build.
@@ -38,11 +38,11 @@
 - If you have not yet built your chugins library (should come with ChucK install as of 1.5.x.x), then you can find information on the build here... https://github.com/ccrma/chugins
 
 
-## :warning: License
+## License
 
 Distributed under the no License. See LICENSE.txt for more information.
 
-## :handshake: Contact
+## Contact
 
 Everett Carpenter - - carpee2 [at] rpi [dot] edu
 
