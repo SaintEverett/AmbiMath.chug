@@ -142,20 +142,21 @@ for(int i; i < 9; i++)
 {
     45*i => myDirection;
     15*i => myElevation;
-    cherr <= "X: " <= mathWiz.xCoordinate(myElevation, myDirection) <= " | " <= wiz.x(myDirection, myElevation) <= IO.newline();
-    cherr <= "Y: " <= mathWiz.yCoordinate(myElevation, myDirection) <= " | " <= wiz.y(myDirection, myElevation) <= IO.newline();
-    cherr <= "Z: " <= mathWiz.zCoordinate(myElevation, myDirection) <= " | " <= wiz.z(myDirection, myElevation) <= IO.newline();
-    cherr <= "V: " <= mathWiz.vCoordinate(myElevation, myDirection) <= " | " <= wiz.v(myDirection, myElevation) <= IO.newline();
-    cherr <= "T: " <= mathWiz.tCoordinate(myElevation, myDirection) <= " | " <= wiz.t(myDirection, myElevation) <= IO.newline();
-    cherr <= "R: " <= mathWiz.rCoordinate(myElevation, myDirection) <= " | " <= wiz.r(myDirection, myElevation) <= IO.newline();
-    cherr <= "S: " <= mathWiz.sCoordinate(myElevation, myDirection) <= " | " <= wiz.s(myDirection, myElevation) <= IO.newline();
-    cherr <= "U: " <= mathWiz.uCoordinate(myElevation, myDirection) <= " | " <= wiz.u(myDirection, myElevation) <= IO.newline();
-    cherr <= "Q: " <= mathWiz.qCoordinate(myElevation, myDirection) <= " | " <= wiz.q(myDirection, myElevation) <= IO.newline();
-    cherr <= "O: " <= mathWiz.oCoordinate(myElevation, myDirection) <= " | " <= wiz.o(myDirection, myElevation) <= IO.newline();
-    cherr <= "M: " <= mathWiz.mCoordinate(myElevation, myDirection) <= " | " <= wiz.m(myDirection, myElevation) <= IO.newline();
-    cherr <= "K: " <= mathWiz.kCoordinate(myElevation, myDirection) <= " | " <= wiz.k(myDirection, myElevation) <= IO.newline();
-    cherr <= "L: " <= mathWiz.lCoordinate(myElevation, myDirection) <= " | " <= wiz.l(myDirection, myElevation) <= IO.newline();
-    cherr <= "N: " <= mathWiz.nCoordinate(myElevation, myDirection) <= " | " <= wiz.n(myDirection, myElevation) <= IO.newline();
-    cherr <= "P: " <= mathWiz.pCoordinate(myElevation, myDirection) <= " | " <= wiz.p(myDirection, myElevation) <= IO.newline();  
+    wiz.all(myDirection,myElevation,myCoordinates,3);
+    cherr <= "X: " <= mathWiz.xCoordinate(myElevation, myDirection) <= " | " <= wiz.x(myDirection, myElevation) <= " | " <= myCoordinates[0] <= IO.newline();
+    cherr <= "Y: " <= mathWiz.yCoordinate(myElevation, myDirection) <= " | " <= wiz.y(myDirection, myElevation) <= " | " <= myCoordinates[1]<= IO.newline();
+    cherr <= "Z: " <= mathWiz.zCoordinate(myElevation, myDirection) <= " | " <= wiz.z(myDirection, myElevation) <= " | " <= myCoordinates[2]<= IO.newline();
+    cherr <= "V: " <= mathWiz.vCoordinate(myElevation, myDirection) <= " | " <= wiz.v(myDirection, myElevation) <= " | " <= myCoordinates[3]<= IO.newline();
+    cherr <= "T: " <= mathWiz.tCoordinate(myElevation, myDirection) <= " | " <= wiz.t(myDirection, myElevation) <= " | " <= myCoordinates[4]<= IO.newline();
+    cherr <= "R: " <= mathWiz.rCoordinate(myElevation, myDirection) <= " | " <= wiz.r(myDirection, myElevation) <= " | " <= myCoordinates[5]<= IO.newline();
+    cherr <= "S: " <= mathWiz.sCoordinate(myElevation, myDirection) <= " | " <= wiz.s(myDirection, myElevation) <= " | " <= myCoordinates[6]<= IO.newline();
+    cherr <= "U: " <= mathWiz.uCoordinate(myElevation, myDirection) <= " | " <= wiz.u(myDirection, myElevation) <= " | " <= myCoordinates[7]<= IO.newline();
+    cherr <= "Q: " <= mathWiz.qCoordinate(myElevation, myDirection) <= " | " <= wiz.q(myDirection, myElevation) <= " | " <= myCoordinates[8]<= IO.newline();
+    cherr <= "O: " <= mathWiz.oCoordinate(myElevation, myDirection) <= " | " <= wiz.o(myDirection, myElevation) <= " | " <= myCoordinates[9]<= IO.newline();
+    cherr <= "M: " <= mathWiz.mCoordinate(myElevation, myDirection) <= " | " <= wiz.m(myDirection, myElevation) <= " | " <= myCoordinates[10]<= IO.newline();
+    cherr <= "K: " <= mathWiz.kCoordinate(myElevation, myDirection) <= " | " <= wiz.k(myDirection, myElevation) <= " | " <= myCoordinates[11]<= IO.newline();
+    cherr <= "L: " <= mathWiz.lCoordinate(myElevation, myDirection) <= " | " <= wiz.l(myDirection, myElevation) <= " | " <= myCoordinates[12]<= IO.newline();
+    cherr <= "N: " <= mathWiz.nCoordinate(myElevation, myDirection) <= " | " <= wiz.n(myDirection, myElevation) <= " | " <= myCoordinates[13]<= IO.newline();
+    cherr <= "P: " <= mathWiz.pCoordinate(myElevation, myDirection) <= " | " <= wiz.p(myDirection, myElevation) <= " | " <= myCoordinates[14]<= IO.newline();  
     cherr <= "--------------------------" <= IO.newline();
 }

@@ -400,8 +400,8 @@ CK_DLL_SFUN(all_Coordinates)
 {
     float direction = GET_NEXT_FLOAT(ARGS);
     float elevation = GET_NEXT_FLOAT(ARGS);
-    int order = GET_NEXT_INT(ARGS);
     Chuck_ArrayFloat* coordinates = (Chuck_ArrayFloat*)GET_NEXT_OBJECT(ARGS);
+    int order = GET_NEXT_INT(ARGS);
     t_CKINT size = (API->object->array_float_size(coordinates));
     int num_speakers = pow((order + 1), 2);
     if (num_speakers == size)
