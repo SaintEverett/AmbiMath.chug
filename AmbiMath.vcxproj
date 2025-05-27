@@ -77,7 +77,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <TargetExt>.chug</TargetExt>
-    <IncludePath>chuck/include;$(IncludePath)</IncludePath>
+    <IncludePath>chuck/include;$(IncludePath);C:\Users\carpe\Documents\build_chugins_here\AmbiMath.chug\include</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>

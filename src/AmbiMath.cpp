@@ -27,169 +27,101 @@ static int w_constant = 1;
 static double g_pi = CK_ONE_PI;
 
 // declaration of chugin constructor
-CK_DLL_CTOR( ambimath_ctor );
+CK_DLL_CTOR(ambimath_ctor);
 // declaration of chugin desctructor
-CK_DLL_DTOR( ambimath_dtor );
+CK_DLL_DTOR(ambimath_dtor);
 
 // example of getter/setter
-CK_DLL_MFUN( ambimath_setParam );
-CK_DLL_MFUN( ambimath_getParam );
+CK_DLL_MFUN(ambimath_setParam);
+CK_DLL_MFUN(ambimath_getParam);
 
 // for chugins extending UGen, this is mono synthesis function for 1 sample
-CK_DLL_TICK( ambimath_tick );
+CK_DLL_TICK(ambimath_tick);
 
 // this is a special offset reserved for chugin internal data
 t_CKINT ambimath_data_offset = 0;
 
 // convert degrees to radians
-<<<<<<< HEAD
 static float degreeRad(float degree)
-=======
-float degreeRad(float degree)
->>>>>>> 93eccd3a888584c501acf385006f6393d7972384
 {
     return (g_pi / 180) * degree;
 }
 // ambisonic maths
-<<<<<<< HEAD
 static float x(float direction, float elevation)
-=======
-float x(float direction, float elevation)
->>>>>>> 93eccd3a888584c501acf385006f6393d7972384
 {
     double x = (cos(degreeRad(direction)) * cos(degreeRad(elevation)));
     return x;
 }
-<<<<<<< HEAD
 static float y(float direction, float elevation)
-=======
-float y(float direction, float elevation)
->>>>>>> 93eccd3a888584c501acf385006f6393d7972384
 {
     double y = ((sin(degreeRad(direction))) * (cos(degreeRad(elevation))));
     return y;
 }
-<<<<<<< HEAD
 static float z(float direction, float elevation)
-=======
-float z(float direction, float elevation)
->>>>>>> 93eccd3a888584c501acf385006f6393d7972384
 {
     double z = (sin(degreeRad(elevation)));
     return z;
 }
-<<<<<<< HEAD
 static float w(float direction, float elevation)
 {
     return w_constant;
 }
 static float r(float direction, float elevation)
-=======
-float w(float direction, float elevation)
-{
-    return w_constant;
-}
-float r(float direction, float elevation)
->>>>>>> 93eccd3a888584c501acf385006f6393d7972384
 {
     double r = (0.5 * (3 * (pow((sin(degreeRad(elevation))), 2)) - 1));
     return r;
 }
-<<<<<<< HEAD
 static float s(float direction, float elevation)
-=======
-float s(float direction, float elevation)
->>>>>>> 93eccd3a888584c501acf385006f6393d7972384
 {
     double s = (0.8660254038 * (cos(degreeRad(direction))) * (sin((2 * degreeRad(elevation)))));
     return s;
 }
-<<<<<<< HEAD
 static float t(float direction, float elevation)
-=======
-float t(float direction, float elevation)
->>>>>>> 93eccd3a888584c501acf385006f6393d7972384
 {
     double t = (0.8660254038 * (sin(degreeRad(direction))) * (sin((2 * degreeRad(elevation)))));
     return t;
 }
-<<<<<<< HEAD
 static float u(float direction, float elevation)
-=======
-float u(float direction, float elevation)
->>>>>>> 93eccd3a888584c501acf385006f6393d7972384
 {
     double u = (0.8660254038 * cos(2 * degreeRad(direction)) * pow(cos(degreeRad(elevation)), 2));
     return u;
 }
-<<<<<<< HEAD
 static float v(float direction, float elevation)
-=======
-float v(float direction, float elevation)
->>>>>>> 93eccd3a888584c501acf385006f6393d7972384
 {
     double v = (0.8660254038 * sin(2 * degreeRad(direction)) * pow(cos(degreeRad(elevation)), 2));
     return v;
 }
-<<<<<<< HEAD
 static float l(float direction, float elevation)
-=======
-float l(float direction, float elevation)
->>>>>>> 93eccd3a888584c501acf385006f6393d7972384
 {
     double l = (0.6123724357 * cos(degreeRad(direction)) * cos(degreeRad(elevation)) * (5 * pow(sin(degreeRad(elevation)), 2) - 1));
     return l;
 }
-<<<<<<< HEAD
 static float m(float direction, float elevation)
-=======
-float m(float direction, float elevation)
->>>>>>> 93eccd3a888584c501acf385006f6393d7972384
 {
     double m = (0.6123724357 * sin(degreeRad(direction)) * cos(degreeRad(elevation)) * (5 * pow(sin(degreeRad(elevation)), 2) - 1));
     return m;
 }
-<<<<<<< HEAD
 static float o(float direction, float elevation)
-=======
-float o(float direction, float elevation)
->>>>>>> 93eccd3a888584c501acf385006f6393d7972384
 {
     double o = (1.936491673 * sin(2 * degreeRad(direction)) * sin(degreeRad(elevation)) * pow(cos(degreeRad(elevation)), 2));
     return o;
 }
-<<<<<<< HEAD
 static float n(float direction, float elevation)
-=======
-float n(float direction, float elevation)
->>>>>>> 93eccd3a888584c501acf385006f6393d7972384
 {
     double n = (1.936491673 * cos(2 * degreeRad(direction)) * sin(degreeRad(elevation)) * pow(cos(degreeRad(elevation)), 2));
     return n;
 }
-<<<<<<< HEAD
 static float p(float direction, float elevation)
-=======
-float p(float direction, float elevation)
->>>>>>> 93eccd3a888584c501acf385006f6393d7972384
 {
     double p = (0.790569415 * cos(3 * degreeRad(direction)) * pow(cos(degreeRad(elevation)), 3));
     return p;
 }
-<<<<<<< HEAD
 static float q(float direction, float elevation)
-=======
-float q(float direction, float elevation)
->>>>>>> 93eccd3a888584c501acf385006f6393d7972384
 {
     double q = (0.790569415 * sin(3 * degreeRad(direction)) * pow(cos(degreeRad(elevation)), 3));
     return q;
 }
-<<<<<<< HEAD
 static float k(float direction, float elevation)
-=======
-float k(float direction, float elevation)
->>>>>>> 93eccd3a888584c501acf385006f6393d7972384
 {
     double k = (0.5 * sin(degreeRad(elevation)) * (5 * pow(sin(degreeRad(elevation)), 2) - 3));
     return k;
@@ -206,20 +138,20 @@ class AmbiMath
 {
 public:
     // constructor
-    AmbiMath( t_CKFLOAT fs )
+    AmbiMath(t_CKFLOAT fs)
     {
         m_param = 0;
     }
 
     // for chugins extending UGen
-    SAMPLE tick( SAMPLE in )
+    SAMPLE tick(SAMPLE in)
     {
         // default: this passes whatever input is patched into chugin
         return in;
     }
 
     // set parameter example
-    t_CKFLOAT setParam( t_CKFLOAT p )
+    t_CKFLOAT setParam(t_CKFLOAT p)
     {
         m_param = p;
         return p;
@@ -227,7 +159,7 @@ public:
 
     // get parameter example
     t_CKFLOAT getParam() { return m_param; }
-    
+
 private:
     // instance data
     t_CKFLOAT m_param;
@@ -239,18 +171,18 @@ private:
 // NOTE: please customize these info fields below; they will be used for
 // chugins loading, probing, and package management and documentation
 //-----------------------------------------------------------------------------
-CK_DLL_INFO( AmbiMath )
+CK_DLL_INFO(AmbiMath)
 {
     // the version string of this chugin, e.g., "v1.2.1"
-    QUERY->setinfo( QUERY, CHUGIN_INFO_CHUGIN_VERSION, "v0.0.1 - 'Lanquidity'");
+    QUERY->setinfo(QUERY, CHUGIN_INFO_CHUGIN_VERSION, "v0.0.1 - 'Lanquidity'");
     // the author(s) of this chugin, e.g., "Alice Baker & Carl Donut"
-    QUERY->setinfo( QUERY, CHUGIN_INFO_AUTHORS, "Everett M. Carpenter" );
+    QUERY->setinfo(QUERY, CHUGIN_INFO_AUTHORS, "Everett M. Carpenter");
     // text description of this chugin; what is it? what does it do? who is it for?
-    QUERY->setinfo( QUERY, CHUGIN_INFO_DESCRIPTION, "AmbiMath calculates cartesian coordinates given an elevation angle and directional angle. As of v0.0.1 'Landquidity', coordinates up to the third order are available." );
+    QUERY->setinfo(QUERY, CHUGIN_INFO_DESCRIPTION, "AmbiMath calculates cartesian coordinates given an elevation angle and directional angle. As of v0.0.1 'Landquidity', coordinates up to the third order are available.");
     // (optional) URL of the homepage for this chugin
-    QUERY->setinfo( QUERY, CHUGIN_INFO_URL, "" );
+    QUERY->setinfo(QUERY, CHUGIN_INFO_URL, "");
     // (optional) contact email
-    QUERY->setinfo( QUERY, CHUGIN_INFO_EMAIL, "" );
+    QUERY->setinfo(QUERY, CHUGIN_INFO_EMAIL, "");
 }
 
 
@@ -258,10 +190,10 @@ CK_DLL_INFO( AmbiMath )
 // query function: ChucK calls this when loading the chugin
 // modify this function to define this chugin's API and language extensions
 //-----------------------------------------------------------------------------
-CK_DLL_QUERY( AmbiMath )
+CK_DLL_QUERY(AmbiMath)
 {
     // generally, don't change this...
-    QUERY->setname( QUERY, "AmbiMath" );
+    QUERY->setname(QUERY, "AmbiMath");
 
     // ------------------------------------------------------------------------
     // begin class definition(s); will be compiled, verified,
@@ -269,17 +201,17 @@ CK_DLL_QUERY( AmbiMath )
     // ------------------------------------------------------------------------
     // NOTE to create a non-UGen class, change the second argument
     // to extend a different ChucK class (e.g., "Object")
-    QUERY->begin_class( QUERY, "AmbiMath", "Object" );
+    QUERY->begin_class(QUERY, "AmbiMath", "Object");
     QUERY->doc_class(QUERY, "Math required for Ambisonics");
 
     // register default constructor
-    QUERY->add_ctor( QUERY, ambimath_ctor );
+    QUERY->add_ctor(QUERY, ambimath_ctor);
     // NOTE constructors can be overloaded like any other functions,
     // each overloaded constructor begins with `QUERY->add_ctor()`
     // followed by a sequence of `QUERY->add_arg()`
 
     // register the destructor (probably no need to change)
-    QUERY->add_dtor( QUERY, ambimath_dtor );
+    QUERY->add_dtor(QUERY, ambimath_dtor);
 
     // for UGens only: add tick function
     // NOTE a non-UGen class should remove or comment out this next line
@@ -390,24 +322,24 @@ CK_DLL_QUERY( AmbiMath )
     // create and set w constant
     QUERY->add_svar(QUERY, "float", "w", TRUE, &w_constant);
     QUERY->doc_var(QUERY, "W constant used in SN3D Ambisonics");
-    
+
     // example of adding setter method
-    QUERY->add_mfun( QUERY, ambimath_setParam, "float", "param" );
+    QUERY->add_mfun(QUERY, ambimath_setParam, "float", "param");
     // example of adding argument to the above method
-    QUERY->add_arg( QUERY, "float", "arg" );
+    QUERY->add_arg(QUERY, "float", "arg");
 
     // example of adding getter method
-    QUERY->add_mfun( QUERY, ambimath_getParam, "float", "param" );
-    
+    QUERY->add_mfun(QUERY, ambimath_getParam, "float", "param");
+
     // this reserves a variable in the ChucK internal class to store 
     // referene to the c++ class we defined above
-    ambimath_data_offset = QUERY->add_mvar( QUERY, "int", "@am_data", false );
+    ambimath_data_offset = QUERY->add_mvar(QUERY, "int", "@am_data", false);
 
     // ------------------------------------------------------------------------
     // end the class definition
     // IMPORTANT: this MUST be called to each class definition!
     // ------------------------------------------------------------------------
-    QUERY->end_class( QUERY );
+    QUERY->end_class(QUERY);
 
     // wasn't that a breeze?
     return TRUE;
@@ -415,50 +347,50 @@ CK_DLL_QUERY( AmbiMath )
 
 
 // implementation for the default constructor
-CK_DLL_CTOR( ambimath_ctor )
+CK_DLL_CTOR(ambimath_ctor)
 {
     // get the offset where we'll store our internal c++ class pointer
-    OBJ_MEMBER_INT( SELF, ambimath_data_offset ) = 0;
-    
+    OBJ_MEMBER_INT(SELF, ambimath_data_offset) = 0;
+
     // instantiate our internal c++ class representation
-    AmbiMath * am_obj = new AmbiMath( API->vm->srate(VM) );
-    
+    AmbiMath* am_obj = new AmbiMath(API->vm->srate(VM));
+
     // store the pointer in the ChucK object member
-    OBJ_MEMBER_INT( SELF, ambimath_data_offset ) = (t_CKINT)am_obj;
+    OBJ_MEMBER_INT(SELF, ambimath_data_offset) = (t_CKINT)am_obj;
 }
 
 
 // implementation for the destructor
-CK_DLL_DTOR( ambimath_dtor )
+CK_DLL_DTOR(ambimath_dtor)
 {
     // get our c++ class pointer
-    AmbiMath * am_obj = (AmbiMath *)OBJ_MEMBER_INT( SELF, ambimath_data_offset );
+    AmbiMath* am_obj = (AmbiMath*)OBJ_MEMBER_INT(SELF, ambimath_data_offset);
     // clean up (this macro tests for NULL, deletes, and zeros out the variable)
-    CK_SAFE_DELETE( am_obj );
+    CK_SAFE_DELETE(am_obj);
     // set the data field to 0
-    OBJ_MEMBER_INT( SELF, ambimath_data_offset ) = 0;
+    OBJ_MEMBER_INT(SELF, ambimath_data_offset) = 0;
 }
 
 // example implementation for setter
-CK_DLL_MFUN( ambimath_setParam )
+CK_DLL_MFUN(ambimath_setParam)
 {
     // get our c++ class pointer
-    AmbiMath * am_obj = (AmbiMath *)OBJ_MEMBER_INT( SELF, ambimath_data_offset );
+    AmbiMath* am_obj = (AmbiMath*)OBJ_MEMBER_INT(SELF, ambimath_data_offset);
 
     // get next argument
     // NOTE argument type must match what is specified above in CK_DLL_QUERY
     // NOTE this advances the ARGS pointer, so save in variable for re-use
-    t_CKFLOAT arg1 = GET_NEXT_FLOAT( ARGS );
-    
+    t_CKFLOAT arg1 = GET_NEXT_FLOAT(ARGS);
+
     // call setParam() and set the return value
-    RETURN->v_float = am_obj->setParam( arg1 );
+    RETURN->v_float = am_obj->setParam(arg1);
 }
 
 // example implementation for getter
 CK_DLL_MFUN(ambimath_getParam)
 {
     // get our c++ class pointer
-    AmbiMath * am_obj = (AmbiMath *)OBJ_MEMBER_INT( SELF, ambimath_data_offset );
+    AmbiMath* am_obj = (AmbiMath*)OBJ_MEMBER_INT(SELF, ambimath_data_offset);
 
     // call getParam() and set the return value
     RETURN->v_float = am_obj->getParam();
@@ -474,11 +406,7 @@ CK_DLL_SFUN(all_Coordinates)
     int num_speakers = pow((order + 1), 2);
     if (num_speakers == size)
     {
-<<<<<<< HEAD
         for (int i = 0; i < size; i++)
-=======
-        for (int i; i < size; i++)
->>>>>>> 93eccd3a888584c501acf385006f6393d7972384
         {
             API->object->array_float_set_idx(coordinates, i, funcs[i](direction, elevation));
         }
@@ -489,7 +417,7 @@ CK_DLL_SFUN(x_Coordinate)
 {
     float direction = GET_NEXT_FLOAT(ARGS);
     float elevation = GET_NEXT_FLOAT(ARGS);
-    RETURN->v_float = x(direction,elevation);
+    RETURN->v_float = x(direction, elevation);
 }
 
 CK_DLL_SFUN(y_Coordinate)
@@ -596,7 +524,7 @@ CK_DLL_SFUN(k_Coordinate)
 * In the chugin.h file, line 2189, there is a block of code for determining the size of a float array inside ChucK.
 * There are also details on retrieving float array members with a given index.
 * As well as details on setting a float array member with a given index.
-* Perhaps the arguments can give the needed array name or pointer, and a for loop can replace each array member. 
+* Perhaps the arguments can give the needed array name or pointer, and a for loop can replace each array member.
 * Make sure to check if the array size lines up with the amount of coordinates given the order.
 * You can also clear an array in this code section, perhaps it's best to clear the given array and then proceed with filling it.
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
