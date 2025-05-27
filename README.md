@@ -19,7 +19,7 @@
 
 ### Prerequisites
 
-- Install ChucK on your computer<a href="https://chuck.stanford.edu/"> Here</a>
+- Install ChucK on your computer<a href="https://chuck.stanford.edu/">here</a>
 
 
 ## FAQ
@@ -32,7 +32,7 @@
 
 ## License
 
-Distributed under the no License. See LICENSE.txt for more information.
+Distributed under the MIT License. See LICENSE.txt for more information.
 
 ## Contact
 
