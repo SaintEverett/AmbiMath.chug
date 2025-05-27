@@ -1,5 +1,3 @@
-[⚠️ Suspicious Content] <div align='center'>
-
 <img src=https://chuck.cs.princeton.edu/doc/images/chuck-logo2023w.png alt="logo" width=512 height=512 />
 
 <h1>Ambisonic Math Library for ChucK</h1>
@@ -24,14 +22,6 @@
 - Up to 3rd order SN3D ambisonic coordinate systems.
 - Individual or all coordinates calculable at any time.
 
-
-### :art: Color Reference
-| Color | Hex |
-| --------------- | ---------------------------------------------------------------- |
-| Primary Color | ![#5a3492](https://via.placeholder.com/10/5a3492?text=+) #5a3492 |
-| Secondary Color | ![#273b5c](https://via.placeholder.com/10/273b5c?text=+) #273b5c |
-| Accent Color | ![#f2c1e8](https://via.placeholder.com/10/f2c1e8?text=+) #f2c1e8 |
-| Text Color | ![#EEEEEE](https://via.placeholder.com/10/EEEEEE?text=+) #EEEEEE |
 
 ## :toolbox: Getting Started
 
