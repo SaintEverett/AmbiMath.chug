@@ -402,11 +402,11 @@ CK_DLL_MFUN(ambimath_getParam)
 
 CK_DLL_MFUN(all_Coordinates)
 {
-    float direction = GET_NEXT_FLOAT(ARGS);
-    float elevation = GET_NEXT_FLOAT(ARGS);
+    t_CKFLOAT direction = GET_NEXT_FLOAT(ARGS);
+    t_CKFLOAT elevation = GET_NEXT_FLOAT(ARGS);
     Chuck_ArrayFloat* coordinates = (Chuck_ArrayFloat*)GET_NEXT_OBJECT(ARGS);
-    int order = GET_NEXT_INT(ARGS);
-    t_CKINT size = (API->object->array_float_size(coordinates));
+    t_CKINT order = GET_NEXT_INT(ARGS);
+    int size = (API->object->array_float_size(coordinates));
     int num_speakers = pow((order + 1), 2);
     if (num_speakers == size)
     {

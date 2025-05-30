@@ -19,7 +19,7 @@
 
 ### Prerequisites
 
-- Install ChucK on your computer<a href="https://chuck.stanford.edu/"> here</a>
+- Install ChucK on your computer <a href="https://chuck.stanford.edu/">here</a>
 
 
 ## FAQ
