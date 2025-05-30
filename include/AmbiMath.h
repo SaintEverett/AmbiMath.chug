@@ -11,19 +11,19 @@ DLL_QUERY libmath_query(Chuck_DL_Query* QUERY);
 
 // impl
 
-CK_DLL_SFUN(x_Coordinate);
-CK_DLL_SFUN(y_Coordinate);
-CK_DLL_SFUN(z_Coordinate);
-CK_DLL_SFUN(r_Coordinate);
-CK_DLL_SFUN(s_Coordinate);
-CK_DLL_SFUN(t_Coordinate);
-CK_DLL_SFUN(u_Coordinate);
-CK_DLL_SFUN(v_Coordinate);
-CK_DLL_SFUN(l_Coordinate);
-CK_DLL_SFUN(m_Coordinate);
-CK_DLL_SFUN(n_Coordinate);
-CK_DLL_SFUN(o_Coordinate);
-CK_DLL_SFUN(p_Coordinate);
-CK_DLL_SFUN(q_Coordinate);
-CK_DLL_SFUN(k_Coordinate);
-CK_DLL_SFUN(all_Coordinates);
+CK_DLL_MFUN(x_Coordinate);
+CK_DLL_MFUN(y_Coordinate);
+CK_DLL_MFUN(z_Coordinate);
+CK_DLL_MFUN(r_Coordinate);
+CK_DLL_MFUN(s_Coordinate);
+CK_DLL_MFUN(t_Coordinate);
+CK_DLL_MFUN(u_Coordinate);
+CK_DLL_MFUN(v_Coordinate);
+CK_DLL_MFUN(l_Coordinate);
+CK_DLL_MFUN(m_Coordinate);
+CK_DLL_MFUN(n_Coordinate);
+CK_DLL_MFUN(o_Coordinate);
+CK_DLL_MFUN(p_Coordinate);
+CK_DLL_MFUN(q_Coordinate);
+CK_DLL_MFUN(k_Coordinate);
+CK_DLL_MFUN(all_Coordinates);

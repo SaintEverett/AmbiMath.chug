@@ -77,7 +77,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <TargetExt>.chug</TargetExt>
-    <IncludePath>chuck/include;$(IncludePath);C:\Users\carpe\Documents\build_chugins_here\AmbiMath.chug\include</IncludePath>
+    <IncludePath>chuck/include;$(IncludePath);C:\Users\carpe\Documents\build_chugins_here\AmbiMath.chug\include;C:\Users\carpe\Documents\GitHub\AmbiMath.chug</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -121,6 +121,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;AMBIMATH_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\carpe\Documents\GitHub\AmbiMath.chug\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
