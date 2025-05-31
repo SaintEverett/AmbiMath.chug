@@ -1,14 +1,4 @@
-/*
-* 
-*   This class is used to quickly calculate the cartesian coordinates of an object within a 3D plane given elevation and directional angles.
-*   These coordinates can be useful in finding speaker coefficients for Ambisonic decoding, or for encoding sounds for Ambisonics.
-*   Math for finding these coefficients was informed by my knowledge of spherical harmonics as well as Angelo Farina's website, which can be found here:
-*   https://www.angelofarina.it/Aurora/HOA_explicit_formulas.htm
-*   
-*   Todo= add additional argument for radius, which will be [0.0,1.0], and is simply a scalar to all coordinates.;
-*/
-
- class ambiMathPolar
+class ambiMathPolar
  {
     float W_CONSTANT;
     float SQ34_CONSTANT;
@@ -131,33 +121,27 @@
     }
 }
 
-ambiMathPolar mathWiz;
-AmbiMath wiz;
-0 => float myElevation;
-0 => float myDirection;
-["X","Y","Z","W","V","T","R","S","U","Q","O","M","K","L","N","P"] @=> string myLetters[];
-float myCoordinates[16]; // X, Y, Z, W, V, T, R, S, U, Q, O, M, K, L, N, P
+AmbiMath works;
+ambiMathPolar help;
+float myCoordinatesClass[16];
+float myCoordinatesChugin[16];
 
-for(int i; i < 9; i++)
-{
-    45*i => myDirection;
-    15*i => myElevation;
-    wiz.all(myDirection,myElevation,myCoordinates,3);
-    cherr <= "X: " <= mathWiz.xCoordinate(myElevation, myDirection) <= " | " <= wiz.x(myDirection, myElevation) <= " | " <= myCoordinates[0] <= IO.newline();
-    cherr <= "Y: " <= mathWiz.yCoordinate(myElevation, myDirection) <= " | " <= wiz.y(myDirection, myElevation) <= " | " <= myCoordinates[1]<= IO.newline();
-    cherr <= "Z: " <= mathWiz.zCoordinate(myElevation, myDirection) <= " | " <= wiz.z(myDirection, myElevation) <= " | " <= myCoordinates[2]<= IO.newline();
-    cherr <= "W: " <= mathWiz.W_CONSTANT                            <= " | " <= wiz.w                           <= " | " <= myCoordinates[3]<= IO.newline();
-    cherr <= "V: " <= mathWiz.vCoordinate(myElevation, myDirection) <= " | " <= wiz.v(myDirection, myElevation) <= " | " <= myCoordinates[4]<= IO.newline();
-    cherr <= "T: " <= mathWiz.tCoordinate(myElevation, myDirection) <= " | " <= wiz.t(myDirection, myElevation) <= " | " <= myCoordinates[5]<= IO.newline();
-    cherr <= "R: " <= mathWiz.rCoordinate(myElevation, myDirection) <= " | " <= wiz.r(myDirection, myElevation) <= " | " <= myCoordinates[6]<= IO.newline();
-    cherr <= "S: " <= mathWiz.sCoordinate(myElevation, myDirection) <= " | " <= wiz.s(myDirection, myElevation) <= " | " <= myCoordinates[7]<= IO.newline();
-    cherr <= "U: " <= mathWiz.uCoordinate(myElevation, myDirection) <= " | " <= wiz.u(myDirection, myElevation) <= " | " <= myCoordinates[8]<= IO.newline();
-    cherr <= "Q: " <= mathWiz.qCoordinate(myElevation, myDirection) <= " | " <= wiz.q(myDirection, myElevation) <= " | " <= myCoordinates[9]<= IO.newline();
-    cherr <= "O: " <= mathWiz.oCoordinate(myElevation, myDirection) <= " | " <= wiz.o(myDirection, myElevation) <= " | " <= myCoordinates[10]<= IO.newline();
-    cherr <= "M: " <= mathWiz.mCoordinate(myElevation, myDirection) <= " | " <= wiz.m(myDirection, myElevation) <= " | " <= myCoordinates[11]<= IO.newline();
-    cherr <= "K: " <= mathWiz.kCoordinate(myElevation, myDirection) <= " | " <= wiz.k(myDirection, myElevation) <= " | " <= myCoordinates[12]<= IO.newline();
-    cherr <= "L: " <= mathWiz.lCoordinate(myElevation, myDirection) <= " | " <= wiz.l(myDirection, myElevation) <= " | " <= myCoordinates[13]<= IO.newline();
-    cherr <= "N: " <= mathWiz.nCoordinate(myElevation, myDirection) <= " | " <= wiz.n(myDirection, myElevation) <= " | " <= myCoordinates[14]<= IO.newline();
-    cherr <= "P: " <= mathWiz.pCoordinate(myElevation, myDirection) <= " | " <= wiz.p(myDirection, myElevation) <= " | " <= myCoordinates[15]<= IO.newline();  
-    cherr <= "==============================" <= IO.newline();
-}
+works.all(45,15,myCoordinatesChugin,3);
+help.coordinates(15,45,myCoordinatesClass,3);
+
+<<< "Chugin: ", myCoordinatesChugin[3], " | ", "Class: ", myCoordinatesClass[0] >>>;
+<<< "Chugin: ", myCoordinatesChugin[1], " | ", "Class: ", myCoordinatesClass[1] >>>;
+<<< "Chugin: ", myCoordinatesChugin[2], " | ", "Class: ", myCoordinatesClass[2] >>>;
+<<< "Chugin: ", myCoordinatesChugin[0], " | ", "Class: ", myCoordinatesClass[3] >>>;
+<<< "Chugin: ", myCoordinatesChugin[4], " | ", "Class: ", myCoordinatesClass[4] >>>;
+<<< "Chugin: ", myCoordinatesChugin[5], " | ", "Class: ", myCoordinatesClass[5] >>>;
+<<< "Chugin: ", myCoordinatesChugin[6], " | ", "Class: ", myCoordinatesClass[6] >>>;
+<<< "Chugin: ", myCoordinatesChugin[7], " | ", "Class: ", myCoordinatesClass[7] >>>;
+<<< "Chugin: ", myCoordinatesChugin[8], " | ", "Class: ", myCoordinatesClass[8] >>>;
+<<< "Chugin: ", myCoordinatesChugin[9], " | ", "Class: ", myCoordinatesClass[9] >>>;
+<<< "Chugin: ", myCoordinatesChugin[10], " | ", "Class: ", myCoordinatesClass[10] >>>;
+<<< "Chugin: ", myCoordinatesChugin[11], " | ", "Class: ", myCoordinatesClass[11] >>>;
+<<< "Chugin: ", myCoordinatesChugin[12], " | ", "Class: ", myCoordinatesClass[12] >>>;
+<<< "Chugin: ", myCoordinatesChugin[13], " | ", "Class: ", myCoordinatesClass[13] >>>;
+<<< "Chugin: ", myCoordinatesChugin[14], " | ", "Class: ", myCoordinatesClass[14] >>>;
+<<< "Chugin: ", myCoordinatesChugin[15], " | ", "Class: ", myCoordinatesClass[15] >>>;

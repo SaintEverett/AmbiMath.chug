@@ -45,94 +45,96 @@ t_CKINT ambimath_data_offset = 0;
 int mode = 0;
 
 // convert degrees to radians
-static float degreeRad(float degree)
+float degreeRad(float degree)
 {
     return (g_pi / 180) * degree;
 }
 // ambisonic maths
-static float x(float direction, float elevation)
+float x(float direction, float elevation)
 {
     double x = (cos(degreeRad(direction)) * cos(degreeRad(elevation)));
     return x;
 }
-static float y(float direction, float elevation)
+float y(float direction, float elevation)
 {
     double y = ((sin(degreeRad(direction))) * (cos(degreeRad(elevation))));
     return y;
 }
-static float z(float direction, float elevation)
+float z(float direction, float elevation)
 {
     double z = (sin(degreeRad(elevation)));
     return z;
 }
-static float w(float direction, float elevation)
+float w(float direction, float elevation)
 {
     return w_constant;
 }
-static float r(float direction, float elevation)
+float r(float direction, float elevation)
 {
     double r = (0.5 * (3 * (pow((sin(degreeRad(elevation))), 2)) - 1));
     return r;
 }
-static float s(float direction, float elevation)
+float s(float direction, float elevation)
 {
     double s = (0.8660254038 * (cos(degreeRad(direction))) * (sin((2 * degreeRad(elevation)))));
     return s;
 }
-static float t(float direction, float elevation)
+float t(float direction, float elevation)
 {
     double t = (0.8660254038 * (sin(degreeRad(direction))) * (sin((2 * degreeRad(elevation)))));
     return t;
 }
-static float u(float direction, float elevation)
+float u(float direction, float elevation)
 {
     double u = (0.8660254038 * cos(2 * degreeRad(direction)) * pow(cos(degreeRad(elevation)), 2));
     return u;
 }
-static float v(float direction, float elevation)
+float v(float direction, float elevation)
 {
     double v = (0.8660254038 * sin(2 * degreeRad(direction)) * pow(cos(degreeRad(elevation)), 2));
     return v;
 }
-static float l(float direction, float elevation)
+float l(float direction, float elevation)
 {
     double l = (0.6123724357 * cos(degreeRad(direction)) * cos(degreeRad(elevation)) * (5 * pow(sin(degreeRad(elevation)), 2) - 1));
     return l;
 }
-static float m(float direction, float elevation)
+float m(float direction, float elevation)
 {
     double m = (0.6123724357 * sin(degreeRad(direction)) * cos(degreeRad(elevation)) * (5 * pow(sin(degreeRad(elevation)), 2) - 1));
     return m;
 }
-static float o(float direction, float elevation)
+float o(float direction, float elevation)
 {
     double o = (1.936491673 * sin(2 * degreeRad(direction)) * sin(degreeRad(elevation)) * pow(cos(degreeRad(elevation)), 2));
     return o;
 }
-static float n(float direction, float elevation)
+float n(float direction, float elevation)
 {
     double n = (1.936491673 * cos(2 * degreeRad(direction)) * sin(degreeRad(elevation)) * pow(cos(degreeRad(elevation)), 2));
     return n;
 }
-static float p(float direction, float elevation)
+float p(float direction, float elevation)
 {
     double p = (0.790569415 * cos(3 * degreeRad(direction)) * pow(cos(degreeRad(elevation)), 3));
     return p;
 }
-static float q(float direction, float elevation)
+float q(float direction, float elevation)
 {
     double q = (0.790569415 * sin(3 * degreeRad(direction)) * pow(cos(degreeRad(elevation)), 3));
     return q;
 }
-static float k(float direction, float elevation)
+float k(float direction, float elevation)
 {
     double k = (0.5 * sin(degreeRad(elevation)) * (5 * pow(sin(degreeRad(elevation)), 2) - 3));
     return k;
 }
 
+
 // array of coordinate function pointers
 typedef float (*func_storage) (float direction, float elevation);
 func_storage funcs[] = {w,y,z,x,v,t,r,s,u,q,o,m,k,l,n,p}; // in spherical order
+
 
 //-----------------------------------------------------------------------------
 // class definition for internal chugin data
@@ -408,11 +410,45 @@ CK_DLL_MFUN(all_Coordinates)
     t_CKINT order = GET_NEXT_INT(ARGS);
     int size = (API->object->array_float_size(coordinates));
     int num_speakers = pow((order + 1), 2);
-    if (num_speakers == size)
+    if (size >= num_speakers)
     {
-        for (int i = 0; i < size; i++)
+        if (order == 1)
         {
-            API->object->array_float_set_idx(coordinates, i, funcs[i](direction, elevation));
+            API->object->array_float_set_idx(coordinates, 0, w(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 1, y(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 2, z(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 3, x(direction, elevation));
+        }
+        else if (order == 2)
+        {
+            API->object->array_float_set_idx(coordinates, 0, w(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 1, y(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 2, z(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 3, x(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 4, v(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 5, t(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 6, r(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 7, s(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 8, u(direction, elevation));
+        }
+        else if (order == 3)
+        {
+            API->object->array_float_set_idx(coordinates, 0, w(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 1, y(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 2, z(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 3, x(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 4, v(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 5, t(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 6, r(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 7, s(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 8, u(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 9, q(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 10, o(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 11, m(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 12, k(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 13, l(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 14, n(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 15, p(direction, elevation));
         }
     }
 }
