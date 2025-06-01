@@ -55,9 +55,17 @@ float x(float direction, float elevation)
     double x = (cos(degreeRad(direction)) * cos(degreeRad(elevation)));
     return x;
 }
+float x(float x, float y, float z)
+{
+    return x;
+}
 float y(float direction, float elevation)
 {
     double y = ((sin(degreeRad(direction))) * (cos(degreeRad(elevation))));
+    return y;
+}
+float y(float x, float y, float z)
+{
     return y;
 }
 float z(float direction, float elevation)
@@ -65,7 +73,15 @@ float z(float direction, float elevation)
     double z = (sin(degreeRad(elevation)));
     return z;
 }
+float z(float x, float y, float z)
+{
+    return z;
+}
 float w(float direction, float elevation)
+{
+    return w_constant;
+}
+float w(float x, float y, float z)
 {
     return w_constant;
 }
@@ -74,9 +90,19 @@ float r(float direction, float elevation)
     double r = (0.5 * (3 * (pow((sin(degreeRad(elevation))), 2)) - 1));
     return r;
 }
+float r(float x, float y, float z)
+{
+    double r = (0.5 * (3 * pow(z, 2) - 1));
+    return x;
+}
 float s(float direction, float elevation)
 {
     double s = (0.8660254038 * (cos(degreeRad(direction))) * (sin((2 * degreeRad(elevation)))));
+    return s;
+}
+float s(float x, float y, float z)
+{
+    double s = (1.732050807568877 * x * z);
     return s;
 }
 float t(float direction, float elevation)
@@ -84,9 +110,19 @@ float t(float direction, float elevation)
     double t = (0.8660254038 * (sin(degreeRad(direction))) * (sin((2 * degreeRad(elevation)))));
     return t;
 }
+float t(float x, float y, float z)
+{
+    double t = (1.732050807568877 * y * z);
+    return t;
+}
 float u(float direction, float elevation)
 {
     double u = (0.8660254038 * cos(2 * degreeRad(direction)) * pow(cos(degreeRad(elevation)), 2));
+    return u;
+}
+float u(float x, float y, float z)
+{
+    double u = (0.8660254037844386 * (pow(x, 2) - pow(y, 2)));
     return u;
 }
 float v(float direction, float elevation)
@@ -94,9 +130,19 @@ float v(float direction, float elevation)
     double v = (0.8660254038 * sin(2 * degreeRad(direction)) * pow(cos(degreeRad(elevation)), 2));
     return v;
 }
+float v(float x, float y, float z)
+{
+    double v = (1.732050807568877 * x * y);
+    return v;
+}
 float l(float direction, float elevation)
 {
     double l = (0.6123724357 * cos(degreeRad(direction)) * cos(degreeRad(elevation)) * (5 * pow(sin(degreeRad(elevation)), 2) - 1));
+    return l;
+}
+float l(float x, float y, float z)
+{
+    double l = (0.6123724356957945 * x * (5 * pow(z, 2) - 1));
     return l;
 }
 float m(float direction, float elevation)
@@ -104,9 +150,19 @@ float m(float direction, float elevation)
     double m = (0.6123724357 * sin(degreeRad(direction)) * cos(degreeRad(elevation)) * (5 * pow(sin(degreeRad(elevation)), 2) - 1));
     return m;
 }
+float m(float x, float y, float z)
+{
+    double m = (0.6123724356957945 * y * (5 * pow(z, 2) - 1));
+    return m;
+}
 float o(float direction, float elevation)
 {
     double o = (1.936491673 * sin(2 * degreeRad(direction)) * sin(degreeRad(elevation)) * pow(cos(degreeRad(elevation)), 2));
+    return o;
+}
+float o(float x, float y, float z)
+{
+    double o = (3.872983346207417 * x * y * z);
     return o;
 }
 float n(float direction, float elevation)
@@ -114,9 +170,19 @@ float n(float direction, float elevation)
     double n = (1.936491673 * cos(2 * degreeRad(direction)) * sin(degreeRad(elevation)) * pow(cos(degreeRad(elevation)), 2));
     return n;
 }
+float n(float x, float y, float z)
+{
+    double n = (1.936491673 * z * (pow(x, 2) - pow(y, 2)));
+    return n;
+}
 float p(float direction, float elevation)
 {
     double p = (0.790569415 * cos(3 * degreeRad(direction)) * pow(cos(degreeRad(elevation)), 3));
+    return p;
+}
+float p(float x, float y, float z)
+{
+    double p = (0.790569415 * x * ((pow(x, 2) - 3) * pow(y, 2)));
     return p;
 }
 float q(float direction, float elevation)
@@ -124,12 +190,66 @@ float q(float direction, float elevation)
     double q = (0.790569415 * sin(3 * degreeRad(direction)) * pow(cos(degreeRad(elevation)), 3));
     return q;
 }
+float q(float x, float y, float z)
+{
+    double q = (0.790569415 * y * (3 * (pow(x, 2) - pow(y, 2))));
+    return q;
+}
 float k(float direction, float elevation)
 {
     double k = (0.5 * sin(degreeRad(elevation)) * (5 * pow(sin(degreeRad(elevation)), 2) - 3));
     return k;
 }
-
+float k(float x, float y, float z)
+{
+    double k = (0.5 * z * (5 * pow(z, 2) - 3));
+    return k;
+}
+float hoa4_0(float direction, float elevation)
+{
+    double coord = (0.739509972887452 * sin(4 * degreeRad(direction)) * pow(sin(degreeRad(elevation)), 4));
+    return coord;
+}
+float hoa4_1(float direction, float elevation)
+{
+    double coord = (2.091650066335189 * sin(3 * degreeRad(direction)) * sin(degreeRad(elevation)) * pow(cos(degreeRad(elevation)), 3));
+    return coord;
+}
+float hoa4_2(float direction, float elevation)
+{
+    double coord = (0.5590169943749474 * sin(2 * degreeRad(direction)) * pow(cos(degreeRad(elevation)), 2) * (7 * pow(sin(degreeRad(elevation)), 2) - 1));
+    return coord;
+}
+float hoa4_3(float direction, float elevation)
+{
+    double coord = (0.3952847075210474 * sin(degreeRad(direction)) * sin(2 * degreeRad(elevation)) * (7 * (pow(sin(degreeRad(elevation)),2)) - 3));
+    return coord;
+}
+float hoa4_4(float direction, float elevation)
+{
+    double coord = (0.125 * (35 * pow(sin(degreeRad(elevation)), 4) - 30 * pow(sin(degreeRad(elevation)), 2) + 3));
+    return coord;
+}
+float hoa4_5(float direction, float elevation)
+{
+    double coord = (0.3952847075210474 * cos(degreeRad(direction)) * sin(2 * degreeRad(elevation)) * (7 * pow(sin(degreeRad(elevation)), 2) - 3));
+    return coord;
+}
+float hoa4_6(float direction, float elevation)
+{
+    double coord = (0.5590169943749474 * cos(2 * degreeRad(direction)) * pow(cos(degreeRad(elevation)), 2) * (7 * pow(sin(degreeRad(elevation)), 2) - 1));
+    return coord;
+}
+float hoa4_7(float direction, float elevation)
+{
+    double coord = (2.091650066335189 * cos(3 * degreeRad(direction)) * sin(degreeRad(elevation)) * pow(cos(degreeRad(elevation)), 3));
+    return coord;
+}
+float hoa4_8(float direction, float elevation)
+{
+    double coord = (0.739509972887452 * cos(4 * degreeRad(direction)) * pow(cos(degreeRad(elevation)), 4));
+    return coord;
+}
 
 // array of coordinate function pointers
 typedef float (*func_storage) (float direction, float elevation);
@@ -227,11 +347,18 @@ CK_DLL_QUERY(AmbiMath)
     // and declare a tickf function using CK_DLL_TICKF  
     // function definition
 
-    // x coordinate
+    // x coordinate(polar)
     QUERY->add_mfun(QUERY, x_Coordinate, "float", "x");
     QUERY->add_arg(QUERY, "float", "direction");
     QUERY->add_arg(QUERY, "float", "elevation");
     QUERY->doc_func(QUERY, "Computes cartesian X coordinate given elevation and direction angles");
+
+    // x coordinate(cartesian)
+    QUERY->add_mfun(QUERY, x_Coordinate, "float", "x");
+    QUERY->add_arg(QUERY, "float", "x");
+    QUERY->add_arg(QUERY, "float", "y");
+    QUERY->add_arg(QUERY, "float", "z");
+    QUERY->doc_func(QUERY, "Computes cartesian X coordinate given x,y,z angles");
 
     // y coodinate
     QUERY->add_mfun(QUERY, y_Coordinate, "float", "y");
@@ -450,6 +577,34 @@ CK_DLL_MFUN(all_Coordinates)
             API->object->array_float_set_idx(coordinates, 14, n(direction, elevation));
             API->object->array_float_set_idx(coordinates, 15, p(direction, elevation));
         }
+        else if (order == 4)
+        {
+            API->object->array_float_set_idx(coordinates, 0, w(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 1, y(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 2, z(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 3, x(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 4, v(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 5, t(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 6, r(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 7, s(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 8, u(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 9, q(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 10, o(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 11, m(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 12, k(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 13, l(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 14, n(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 15, p(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 16, hoa4_0(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 17, hoa4_1(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 18, hoa4_2(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 19, hoa4_3(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 20, hoa4_4(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 21, hoa4_5(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 22, hoa4_6(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 23, hoa4_7(direction, elevation));
+            API->object->array_float_set_idx(coordinates, 24, hoa4_8(direction, elevation));
+        }
     }
 }
 
@@ -457,7 +612,9 @@ CK_DLL_MFUN(x_Coordinate)
 {
     float direction = GET_NEXT_FLOAT(ARGS);
     float elevation = GET_NEXT_FLOAT(ARGS);
-    RETURN->v_float = x(direction, elevation);
+    float z = GET_NEXT_FLOAT(ARGS);
+    if (z == NULL) RETURN->v_float = x(direction,elevation);
+    else RETURN->v_float = x(direction,elevation,z);
 }
 
 CK_DLL_MFUN(y_Coordinate)
