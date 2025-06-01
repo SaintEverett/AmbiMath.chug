@@ -126,8 +126,9 @@ ambiMathPolar help;
 float myCoordinatesClass[16];
 float myCoordinatesChugin[16];
 
-works.all(45,15,myCoordinatesChugin,3);
-help.coordinates(15,45,myCoordinatesClass,3);
+works.all(0.7071067812,0.2588190451,0,myCoordinatesChugin,3);
+works.all(45,15,myCoordinatesClass,3);
+
 
 <<< "Chugin: ", myCoordinatesChugin[3], " | ", "Class: ", myCoordinatesClass[0] >>>;
 <<< "Chugin: ", myCoordinatesChugin[1], " | ", "Class: ", myCoordinatesClass[1] >>>;
