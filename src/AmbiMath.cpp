@@ -92,8 +92,9 @@ double r(float direction, float elevation)
 }
 double r(float x, float y, float z)
 {
-    double r = (0.5 * (3 * pow(z, 2) - 1));
-    return x;
+    double r = (0.5 * (3 * (pow(z, 2)) - 1));
+    return r;
+    return r;
 }
 double s(float direction, float elevation)
 {
@@ -182,7 +183,7 @@ double p(float direction, float elevation)
 }
 double p(float x, float y, float z)
 {
-    double p = (0.790569415 * x * ((pow(x, 2) - 3) * pow(y, 2)));
+    double p = (0.790569415 * x * (pow(x, 2) - (3 * pow(y, 2))));
     return p;
 }
 double q(float direction, float elevation)
@@ -192,7 +193,7 @@ double q(float direction, float elevation)
 }
 double q(float x, float y, float z)
 {
-    double q = (0.790569415 * y * (3 * (pow(x, 2) - pow(y, 2))));
+    double q = (0.790569415 * y * ((3 * pow(x, 2)) - pow(y, 2)));
     return q;
 }
 double k(float direction, float elevation)
@@ -222,7 +223,7 @@ double hoa4_1(float direction, float elevation)
 }
 double hoa4_1(float x, float y, float z)
 {
-    double coord = (2.091650066335189 * y * z * (3 * (pow(x, 2) - pow(y, 2))));
+    double coord = (2.091650066335189 * y * z * ((3 * (pow(x, 2)) - pow(y, 2))));
     return coord;
 }
 double hoa4_2(float direction, float elevation)
