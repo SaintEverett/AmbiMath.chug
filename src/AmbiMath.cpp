@@ -52,7 +52,7 @@ double degreeRad(float degree)
 // ambisonic maths
 double x(float direction, float elevation)
 {
-    double x = (cos(degreeRad(direction)) * cos(degreeRad(elevation)));
+    double x = (cosf(degreeRad(direction)) * cosf(degreeRad(elevation)));
     return x;
 }
 double x(float x, float y, float z)
@@ -61,7 +61,7 @@ double x(float x, float y, float z)
 }
 double y(float direction, float elevation)
 {
-    double y = ((sin(degreeRad(direction))) * (cos(degreeRad(elevation))));
+    double y = ((sinf(degreeRad(direction))) * (cosf(degreeRad(elevation))));
     return y;
 }
 double y(float x, float y, float z)
@@ -70,7 +70,7 @@ double y(float x, float y, float z)
 }
 double z(float direction, float elevation)
 {
-    double z = (sin(degreeRad(elevation)));
+    double z = (sinf(degreeRad(elevation)));
     return z;
 }
 double z(float x, float y, float z)
@@ -87,7 +87,7 @@ double w(float x, float y, float z)
 }
 double r(float direction, float elevation)
 {
-    double r = (0.5 * (3 * (pow((sin(degreeRad(elevation))), 2)) - 1));
+    double r = (0.5 * (3 * (pow((sinf(degreeRad(elevation))), 2)) - 1));
     return r;
 }
 double r(float x, float y, float z)
@@ -98,7 +98,7 @@ double r(float x, float y, float z)
 }
 double s(float direction, float elevation)
 {
-    double s = (0.8660254038 * (cos(degreeRad(direction))) * (sin((2 * degreeRad(elevation)))));
+    double s = (0.8660254038 * (cosf(degreeRad(direction))) * (sinf((2 * degreeRad(elevation)))));
     return s;
 }
 double s(float x, float y, float z)
@@ -108,7 +108,7 @@ double s(float x, float y, float z)
 }
 double t(float direction, float elevation)
 {
-    double t = (0.8660254038 * (sin(degreeRad(direction))) * (sin((2 * degreeRad(elevation)))));
+    double t = (0.8660254038 * (sinf(degreeRad(direction))) * (sinf((2 * degreeRad(elevation)))));
     return t;
 }
 double t(float x, float y, float z)
@@ -118,7 +118,7 @@ double t(float x, float y, float z)
 }
 double u(float direction, float elevation)
 {
-    double u = (0.8660254038 * cos(2 * degreeRad(direction)) * pow(cos(degreeRad(elevation)), 2));
+    double u = (0.8660254038 * cosf(2 * degreeRad(direction)) * pow(cosf(degreeRad(elevation)), 2));
     return u;
 }
 double u(float x, float y, float z)
@@ -128,7 +128,7 @@ double u(float x, float y, float z)
 }
 double v(float direction, float elevation)
 {
-    double v = (0.8660254038 * sin(2 * degreeRad(direction)) * pow(cos(degreeRad(elevation)), 2));
+    double v = (0.8660254038 * sinf(2 * degreeRad(direction)) * pow(cosf(degreeRad(elevation)), 2));
     return v;
 }
 double v(float x, float y, float z)
@@ -138,7 +138,7 @@ double v(float x, float y, float z)
 }
 double l(float direction, float elevation)
 {
-    double l = (0.6123724357 * cos(degreeRad(direction)) * cos(degreeRad(elevation)) * (5 * pow(sin(degreeRad(elevation)), 2) - 1));
+    double l = (0.6123724357 * cosf(degreeRad(direction)) * cosf(degreeRad(elevation)) * (5 * pow(sinf(degreeRad(elevation)), 2) - 1));
     return l;
 }
 double l(float x, float y, float z)
@@ -148,7 +148,7 @@ double l(float x, float y, float z)
 }
 double m(float direction, float elevation)
 {
-    double m = (0.6123724357 * sin(degreeRad(direction)) * cos(degreeRad(elevation)) * (5 * pow(sin(degreeRad(elevation)), 2) - 1));
+    double m = (0.6123724357 * sinf(degreeRad(direction)) * cosf(degreeRad(elevation)) * (5 * pow(sinf(degreeRad(elevation)), 2) - 1));
     return m;
 }
 double m(float x, float y, float z)
@@ -158,7 +158,7 @@ double m(float x, float y, float z)
 }
 double o(float direction, float elevation)
 {
-    double o = (1.936491673 * sin(2 * degreeRad(direction)) * sin(degreeRad(elevation)) * pow(cos(degreeRad(elevation)), 2));
+    double o = (1.936491673 * sinf(2 * degreeRad(direction)) * sinf(degreeRad(elevation)) * pow(cosf(degreeRad(elevation)), 2));
     return o;
 }
 double o(float x, float y, float z)
@@ -168,7 +168,7 @@ double o(float x, float y, float z)
 }
 double n(float direction, float elevation)
 {
-    double n = (1.936491673 * cos(2 * degreeRad(direction)) * sin(degreeRad(elevation)) * pow(cos(degreeRad(elevation)), 2));
+    double n = (1.936491673 * cosf(2 * degreeRad(direction)) * sinf(degreeRad(elevation)) * pow(cosf(degreeRad(elevation)), 2));
     return n;
 }
 double n(float x, float y, float z)
@@ -178,7 +178,7 @@ double n(float x, float y, float z)
 }
 double p(float direction, float elevation)
 {
-    double p = (0.790569415 * cos(3 * degreeRad(direction)) * pow(cos(degreeRad(elevation)), 3));
+    double p = (0.790569415 * cosf(3 * degreeRad(direction)) * pow(cosf(degreeRad(elevation)), 3));
     return p;
 }
 double p(float x, float y, float z)
@@ -188,7 +188,7 @@ double p(float x, float y, float z)
 }
 double q(float direction, float elevation)
 {
-    double q = (0.790569415 * sin(3 * degreeRad(direction)) * pow(cos(degreeRad(elevation)), 3));
+    double q = (0.790569415 * sinf(3 * degreeRad(direction)) * pow(cosf(degreeRad(elevation)), 3));
     return q;
 }
 double q(float x, float y, float z)
@@ -198,7 +198,7 @@ double q(float x, float y, float z)
 }
 double k(float direction, float elevation)
 {
-    double k = (0.5 * sin(degreeRad(elevation)) * (5 * pow(sin(degreeRad(elevation)), 2) - 3));
+    double k = (0.5 * sinf(degreeRad(elevation)) * (5 * pow(sinf(degreeRad(elevation)), 2) - 3));
     return k;
 }
 double k(float x, float y, float z)
@@ -208,7 +208,7 @@ double k(float x, float y, float z)
 }
 double hoa4_0(float direction, float elevation)
 {
-    double coord = (0.739509972887452 * sin(4 * degreeRad(direction)) * pow(sin(degreeRad(elevation)), 4));
+    double coord = (0.739509972887452 * sinf(4 * degreeRad(direction)) * pow(sinf(degreeRad(elevation)), 4));
     return coord;
 }
 double hoa4_0(float x, float y, float z)
@@ -218,7 +218,7 @@ double hoa4_0(float x, float y, float z)
 }
 double hoa4_1(float direction, float elevation)
 {
-    double coord = (2.091650066335189 * sin(3 * degreeRad(direction)) * sin(degreeRad(elevation)) * pow(cos(degreeRad(elevation)), 3));
+    double coord = (2.091650066335189 * sinf(3 * degreeRad(direction)) * sinf(degreeRad(elevation)) * pow(cosf(degreeRad(elevation)), 3));
     return coord;
 }
 double hoa4_1(float x, float y, float z)
@@ -228,7 +228,7 @@ double hoa4_1(float x, float y, float z)
 }
 double hoa4_2(float direction, float elevation)
 {
-    double coord = (0.5590169943749474 * sin(2 * degreeRad(direction)) * pow(cos(degreeRad(elevation)), 2) * (7 * pow(sin(degreeRad(elevation)), 2) - 1));
+    double coord = (0.5590169943749474 * sinf(2 * degreeRad(direction)) * pow(cosf(degreeRad(elevation)), 2) * (7 * pow(sinf(degreeRad(elevation)), 2) - 1));
     return coord;
 }
 double hoa4_2(float x, float y, float z)
@@ -238,7 +238,7 @@ double hoa4_2(float x, float y, float z)
 }
 double hoa4_3(float direction, float elevation)
 {
-    double coord = (0.3952847075210474 * sin(degreeRad(direction)) * sin(2 * degreeRad(elevation)) * (7 * (pow(sin(degreeRad(elevation)),2)) - 3));
+    double coord = (0.3952847075210474 * sinf(degreeRad(direction)) * sinf(2 * degreeRad(elevation)) * (7 * (pow(sinf(degreeRad(elevation)),2)) - 3));
     return coord;
 }
 double hoa4_3(float x, float y, float z)
@@ -248,7 +248,7 @@ double hoa4_3(float x, float y, float z)
 }
 double hoa4_4(float direction, float elevation)
 {
-    double coord = (0.125 * (35 * pow(sin(degreeRad(elevation)), 4) - 30 * pow(sin(degreeRad(elevation)), 2) + 3));
+    double coord = (0.125 * (35 * pow(sinf(degreeRad(elevation)), 4) - 30 * pow(sinf(degreeRad(elevation)), 2) + 3));
     return coord;
 }
 double hoa4_4(float x, float y, float z)
@@ -258,7 +258,7 @@ double hoa4_4(float x, float y, float z)
 }
 double hoa4_5(float direction, float elevation)
 {
-    double coord = (0.3952847075210474 * cos(degreeRad(direction)) * sin(2 * degreeRad(elevation)) * (7 * pow(sin(degreeRad(elevation)), 2) - 3));
+    double coord = (0.3952847075210474 * cosf(degreeRad(direction)) * sinf(2 * degreeRad(elevation)) * (7 * pow(sinf(degreeRad(elevation)), 2) - 3));
     return coord;
 }
 double hoa4_5(float x, float y, float z)
@@ -268,7 +268,7 @@ double hoa4_5(float x, float y, float z)
 }
 double hoa4_6(float direction, float elevation)
 {
-    double coord = (0.5590169943749474 * cos(2 * degreeRad(direction)) * pow(cos(degreeRad(elevation)), 2) * (7 * pow(sin(degreeRad(elevation)), 2) - 1));
+    double coord = (0.5590169943749474 * cosf(2 * degreeRad(direction)) * pow(cosf(degreeRad(elevation)), 2) * (7 * pow(sinf(degreeRad(elevation)), 2) - 1));
     return coord;
 }
 double hoa4_6(float x, float y, float z)
@@ -278,7 +278,7 @@ double hoa4_6(float x, float y, float z)
 }
 double hoa4_7(float direction, float elevation)
 {
-    double coord = (2.091650066335189 * cos(3 * degreeRad(direction)) * sin(degreeRad(elevation)) * pow(cos(degreeRad(elevation)), 3));
+    double coord = (2.091650066335189 * cosf(3 * degreeRad(direction)) * sinf(degreeRad(elevation)) * pow(cosf(degreeRad(elevation)), 3));
     return coord;
 }
 double hoa4_7(float x, float y, float z)
@@ -288,7 +288,7 @@ double hoa4_7(float x, float y, float z)
 }
 double hoa4_8(float direction, float elevation)
 {
-    double coord = (0.739509972887452 * cos(4 * degreeRad(direction)) * pow(cos(degreeRad(elevation)), 4));
+    double coord = (0.739509972887452 * cosf(4 * degreeRad(direction)) * pow(cosf(degreeRad(elevation)), 4));
     return coord;
 }
 double hoa4_8(float x, float y, float z)
@@ -391,7 +391,7 @@ CK_DLL_QUERY(AmbiMath)
     // QUERY->add_ugen_func( QUERY, ambimath_tick, NULL, 1, 1 );
     // NOTE: if this is to be a UGen with more than 1 channel,
     // e.g., a multichannel UGen -- will need to use add_ugen_funcf()
-    // and declare a tickf function using CK_DLL_TICKF  
+    // and declare a tickf function usinfg CK_DLL_TICKF  
     // function definition
 
     // x coordinate(polar)
