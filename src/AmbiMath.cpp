@@ -428,6 +428,7 @@ CK_DLL_MFUN(ambimath_getParam)
 
 CK_DLL_MFUN(all_CoordinatePolar)
 {
+    double chuginCoordinates[64];
     t_CKFLOAT direction = GET_NEXT_FLOAT(ARGS);
     t_CKFLOAT elevation = GET_NEXT_FLOAT(ARGS);
     Chuck_ArrayFloat* coordinates = (Chuck_ArrayFloat*)GET_NEXT_OBJECT(ARGS);
@@ -436,77 +437,41 @@ CK_DLL_MFUN(all_CoordinatePolar)
     int num_speakers = pow((order + 1), 2);
     if (size >= num_speakers)
     {
+        all(direction, elevation, chuginCoordinates, order);
         if (order == 1)
         {
-            API->object->array_float_set_idx(coordinates, 0, w(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 1, y(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 2, z(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 3, x(direction, elevation));
+            for (int i = 0; i < 4; i++)
+            {
+                API->object->array_float_set_idx(coordinates, i, chuginCoordinates[i]);
+            }
         }
         else if (order == 2)
         {
-            API->object->array_float_set_idx(coordinates, 0, w(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 1, y(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 2, z(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 3, x(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 4, v(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 5, t(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 6, r(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 7, s(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 8, u(direction, elevation));
+            for (int i = 0; i < 9; i++)
+            {
+                API->object->array_float_set_idx(coordinates, i, chuginCoordinates[i]);
+            }
         }
         else if (order == 3)
         {
-            API->object->array_float_set_idx(coordinates, 0, w(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 1, y(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 2, z(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 3, x(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 4, v(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 5, t(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 6, r(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 7, s(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 8, u(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 9, q(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 10, o(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 11, m(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 12, k(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 13, l(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 14, n(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 15, p(direction, elevation));
+            for (int i = 0; i < 16; i++)
+            {
+                API->object->array_float_set_idx(coordinates, i, chuginCoordinates[i]);
+            }
         }
         else if (order == 4)
         {
-            API->object->array_float_set_idx(coordinates, 0, w(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 1, y(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 2, z(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 3, x(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 4, v(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 5, t(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 6, r(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 7, s(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 8, u(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 9, q(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 10, o(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 11, m(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 12, k(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 13, l(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 14, n(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 15, p(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 16, hoa4_0(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 17, hoa4_1(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 18, hoa4_2(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 19, hoa4_3(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 20, hoa4_4(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 21, hoa4_5(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 22, hoa4_6(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 23, hoa4_7(direction, elevation));
-            API->object->array_float_set_idx(coordinates, 24, hoa4_8(direction, elevation));
+            for (int i = 0; i < 25; i++)
+            {
+                API->object->array_float_set_idx(coordinates, i, chuginCoordinates[i]);
+            }
         }
     }
 }
 
 CK_DLL_MFUN(all_CoordinateCartesian)
 {
+    double chuginCoordinates[64];
     t_CKFLOAT x_ = GET_NEXT_FLOAT(ARGS);
     t_CKFLOAT y_ = GET_NEXT_FLOAT(ARGS);
     t_CKFLOAT z_ = GET_NEXT_FLOAT(ARGS);
@@ -516,71 +481,34 @@ CK_DLL_MFUN(all_CoordinateCartesian)
     int num_speakers = pow((order + 1), 2);
     if (size >= num_speakers)
     {
+        all(x_, y_, z_, chuginCoordinates, order);
         if (order == 1)
         {
-            API->object->array_float_set_idx(coordinates, 0, w(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 1, y(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 2, z(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 3, x(x_, y_, z_));
+            for (int i = 0; i < 4; i++)
+            {
+                API->object->array_float_set_idx(coordinates, i, chuginCoordinates[i]);
+            }
         }
         else if (order == 2)
         {
-            API->object->array_float_set_idx(coordinates, 0, w(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 1, y(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 2, z(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 3, x(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 4, v(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 5, t(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 6, r(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 7, s(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 8, u(x_, y_, z_));
+            for (int i = 0; i < 9; i++)
+            {
+                API->object->array_float_set_idx(coordinates, i, chuginCoordinates[i]);
+            }
         }
         else if (order == 3)
         {
-            API->object->array_float_set_idx(coordinates, 0, w(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 1, y(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 2, z(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 3, x(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 4, v(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 5, t(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 6, r(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 7, s(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 8, u(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 9, q(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 10, o(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 11, m(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 12, k(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 13, l(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 14, n(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 15, p(x_, y_, z_));
+            for (int i = 0; i < 16; i++)
+            {
+                API->object->array_float_set_idx(coordinates, i, chuginCoordinates[i]);
+            }
         }
         else if (order == 4)
         {
-            API->object->array_float_set_idx(coordinates, 0, w(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 1, y(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 2, z(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 3, x(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 4, v(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 5, t(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 6, r(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 7, s(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 8, u(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 9, q(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 10, o(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 11, m(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 12, k(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 13, l(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 14, n(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 15, p(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 16, hoa4_0(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 17, hoa4_1(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 18, hoa4_2(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 19, hoa4_3(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 20, hoa4_4(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 21, hoa4_5(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 22, hoa4_6(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 23, hoa4_7(x_, y_, z_));
-            API->object->array_float_set_idx(coordinates, 24, hoa4_8(x_, y_, z_));
+            for (int i = 0; i < 25; i++)
+            {
+                API->object->array_float_set_idx(coordinates, i, chuginCoordinates[i]);
+            }
         }
     }
 }

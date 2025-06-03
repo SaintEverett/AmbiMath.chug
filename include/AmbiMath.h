@@ -263,6 +263,51 @@ double hoa4_8(float x, float y, float z)
     double coord = (0.739509972887452 * ((pow(x, 4)) - 6 * pow(x, 2) * pow(y, 2) + pow(y, 4)));
     return coord;
 }
+double hoa5_0(float direction, float elevation)
+{
+    double coord = (0.70156076 * sinf(5 * direction) * (pow(cosf(elevation), 5)));
+    return coord;
+}
+double hoa5_0(float x, float y, float z)
+{
+    double coord = (0.70156076 * y * (5 * pow(x, 4) - 10 * pow(x, 2) * pow(y, 2) + pow(y, 4)));
+    return coord;
+}
+double hoa5_1(float direction, float elevation)
+{
+    double coord = (2.128529919 * sinf(4 * direction) * sinf(elevation) * pow(cosf(elevation), 4));
+    return coord;
+}
+double hoa5_1(float x, float y, float z)
+{
+    double coord = (8.874119675 * x * y * z * (pow(x, 2) - pow(y, 2)));
+    return coord;
+}
+
+// pointer storage of polar function pointers
+typedef double (*polarFuncStorage) (float direction, float elevation);
+polarFuncStorage polarFunctions[] = { w,y,z,x,v,t,r,s,u,q,o,m,k,l,n,p,hoa4_0,hoa4_1,hoa4_2,hoa4_3,hoa4_4,hoa4_5,hoa4_6,hoa4_7,hoa4_8 }; // in spherical order
+// point storage of cartesian function pointers
+typedef double (*cartesianFuncStorage) (float x, float y, float z);
+cartesianFuncStorage cartesianFunctions[] = { w,y,z,x,v,t,r,s,u,q,o,m,k,l,n,p,hoa4_0,hoa4_1,hoa4_2,hoa4_3,hoa4_4,hoa4_5,hoa4_6,hoa4_7,hoa4_8 }; // in spherical order
+
+void all(float direction, float elevation, double coordinates[], int order)
+{
+    int numStream = pow((order + 1), 2);
+    for (int i = 0; i < numStream; i++)
+    {
+        coordinates[i] = polarFunctions[i](direction, elevation);
+    }
+}
+
+void all(float x, float y, float z, double coordinates[], int order)
+{
+    int numStream = pow((order + 1), 2);
+    for (int i = 0; i < numStream; i++)
+    {
+        coordinates[i] = cartesianFunctions[i](x, y, z);
+    }
+}
 
 // impl
 CK_DLL_MFUN(x_CoordinatePolar);
