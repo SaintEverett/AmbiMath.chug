@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------------
 // file: AmbiMath.h
-// desc: class library for 'ambiMath'
+// desc: class library for 'AmbiMath'
 //
 // author: Everett M. Carpenter
 // date: Summer 2025

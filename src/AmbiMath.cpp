@@ -102,7 +102,6 @@ CK_DLL_INFO(AmbiMath)
     QUERY->setinfo(QUERY, CHUGIN_INFO_EMAIL, "");
 }
 
-
 //-----------------------------------------------------------------------------
 // query function: ChucK calls this when loading the chugin
 // modify this function to define this chugin's API and language extensions
