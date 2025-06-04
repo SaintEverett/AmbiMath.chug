@@ -263,25 +263,23 @@ double hoa4_8(float x, float y, float z)
     double coord = (0.739509972887452 * ((pow(x, 4)) - 6 * pow(x, 2) * pow(y, 2) + pow(y, 4)));
     return coord;
 }
-double hoa5_0(float direction, float elevation)
+void hoa5(float direction, float elevation, double coordinates[])
 {
-    double coord = (0.70156076 * sinf(5 * direction) * (pow(cosf(elevation), 5)));
-    return coord;
-}
-double hoa5_0(float x, float y, float z)
-{
-    double coord = (0.70156076 * y * (5 * pow(x, 4) - 10 * pow(x, 2) * pow(y, 2) + pow(y, 4)));
-    return coord;
-}
-double hoa5_1(float direction, float elevation)
-{
-    double coord = (2.128529919 * sinf(4 * direction) * sinf(elevation) * pow(cosf(elevation), 4));
-    return coord;
-}
-double hoa5_1(float x, float y, float z)
-{
-    double coord = (8.874119675 * x * y * z * (pow(x, 2) - pow(y, 2)));
-    return coord;
+    float sin_e = sinf(elevation);
+    float sin_a = sinf(direction);
+    float cos_e = cosf(elevation);
+    float cos_a = cosf(direction);
+    coordinates[25] = (0.70156076 * sinf(5 * direction) * (pow(cos_e, 5)));
+    coordinates[26] = (2.128529919 * sinf(4 * direction) * sin_e * (pow(cos_e, 4)));
+    coordinates[27] = (0.522912516 * sinf(3 * direction) * sin_e * (pow(cos_e, 3)) * (9 * (pow(sin_e, 2)) - 1));
+    coordinates[28] = (2.561737691 * sinf(2 * direction) * sin_e * (pow(cos_e, 2)) * (3 * pow(sin_e, 2) - 1));
+    coordinates[29] = (0.4841229183 * sin_a * cos_e * (21 * (pow(sin_e, 4)) - 14) * (pow(sin_e, 2) + 1));
+    coordinates[30] = (0.125 * (63 * (pow(sin_e, 5)) - 70 * (pow(sin_e, 3)) + 15 * sin_e));
+    coordinates[31] = (0.4841229183 * cos_a * cos_e * (21 * (pow(sin_e, 4) - 14 * (pow(sin_e, 2)) + 1)));
+    coordinates[32] = (2.561737691 * cosf(2 * direction) * sin_e * (pow(cos_e, 2)) * (3 * (pow(sin_e, 2)) * 1));
+    coordinates[33] = (0.522912516 * cosf(3 * direction) * (pow(cos_e, 3)) * (9 * (pow(sin_e, 2)) - 1));
+    coordinates[34] = (2.128529919 * cosf(4 * direction) * sin_e * (pow(cos_e, 4)));
+    coordinates[35] = (0.70156076 * cosf(5 * direction) * (pow(cos_e, 5)));
 }
 
 // pointer storage of polar function pointers
