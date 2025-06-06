@@ -4,6 +4,22 @@
 //
 // author: Everett M. Carpenter
 // date: Summer 2025
+// 
+// Math optimization is still being worked on, since high performance calculations is needed for live diffusion. 
+// Here is a list of things that should be investigated regarding optimization:
+// 1. High power exponentials (this is implemented for powers > 2, justified by https://baptiste-wicht.com/posts/2017/09/cpp11-performance-tip-when-to-use-std-pow.html )
+// 2. Recalculation of cos & sin of elevation and direction (consider lookups of these) 
+//      - Trade off of having this method is singular coordinates cannot be called (lookup table is already implemented in "all" but not possible in individual coordinates
+//        Individual coordinates could be called if Chugin ecosystem is converted to internal data storage (one instance holds current coordinates).
+//        This method could be good, and the chugin could act as a full encoder when UGen functionality is implemented.
+//        An example patch = AmbiEnco (ambimath with UGen function) => AmbiDeco (decoder);
+// 
+//        AmbiEnc => AmbiDeco;
+//        for(int i; i < AmbiDec.channels(); i++)
+//        {
+//           AmbiDeco.chan(i) => dac.chan(i);
+//        }
+// 
 //-----------------------------------------------------------------------------
 #include "chugin.h"
 // query
@@ -145,7 +161,8 @@ double n(float x, float y, float z)
 }
 double p(float direction, float elevation)
 {
-    double p = (0.790569415 * cosf(3 * degreeRad(direction)) * pow(cosf(degreeRad(elevation)), 3));
+    float cos_e = cosf(degreeRad(elevation));
+    double p = (0.790569415 * cosf(3 * degreeRad(direction)) * (cos_e * cos_e * cos_e));
     return p;
 }
 double p(float x, float y, float z)
@@ -155,7 +172,8 @@ double p(float x, float y, float z)
 }
 double q(float direction, float elevation)
 {
-    double q = (0.790569415 * sinf(3 * degreeRad(direction)) * pow(cosf(degreeRad(elevation)), 3));
+    float cos_e = cosf(degreeRad(elevation));
+    double q = (0.790569415 * sinf(3 * degreeRad(direction)) * (cos_e * cos_e * cos_e));
     return q;
 }
 double q(float x, float y, float z)
@@ -175,7 +193,8 @@ double k(float x, float y, float z)
 }
 double hoa4_0(float direction, float elevation)
 {
-    double coord = (0.739509972887452 * sinf(4 * degreeRad(direction)) * pow(sinf(degreeRad(elevation)), 4));
+    float sin_e = sinf(degreeRad(elevation));
+    double coord = (0.739509972887452 * sinf(4 * degreeRad(direction)) * (sin_e * sin_e * sin_e * sin_e));
     return coord;
 }
 double hoa4_0(float x, float y, float z)
@@ -185,7 +204,8 @@ double hoa4_0(float x, float y, float z)
 }
 double hoa4_1(float direction, float elevation)
 {
-    double coord = (2.091650066335189 * sinf(3 * degreeRad(direction)) * sinf(degreeRad(elevation)) * pow(cosf(degreeRad(elevation)), 3));
+    float cos_e = cosf(degreeRad(elevation));
+    double coord = (2.091650066335189 * sinf(3 * degreeRad(direction)) * sinf(degreeRad(elevation)) * (cos_e * cos_e * cos_e));
     return coord;
 }
 double hoa4_1(float x, float y, float z)
@@ -220,7 +240,7 @@ double hoa4_4(float direction, float elevation)
 }
 double hoa4_4(float x, float y, float z)
 {
-    double coord = (0.125 * (35 * pow(z, 4) - 30 * pow(z, 2) + 3));
+    double coord = (0.125 * (35 * (z * z * z * z) - 30 * pow(z, 2) + 3));
     return coord;
 }
 double hoa4_5(float direction, float elevation)
@@ -245,7 +265,8 @@ double hoa4_6(float x, float y, float z)
 }
 double hoa4_7(float direction, float elevation)
 {
-    double coord = (2.091650066335189 * cosf(3 * degreeRad(direction)) * sinf(degreeRad(elevation)) * pow(cosf(degreeRad(elevation)), 3));
+    float cos_e = cosf(degreeRad(elevation));
+    double coord = (2.091650066335189 * cosf(3 * degreeRad(direction)) * sinf(degreeRad(elevation)) * (cos_e * cos_e * cos_e));
     return coord;
 }
 double hoa4_7(float x, float y, float z)
@@ -255,31 +276,32 @@ double hoa4_7(float x, float y, float z)
 }
 double hoa4_8(float direction, float elevation)
 {
-    double coord = (0.739509972887452 * cosf(4 * degreeRad(direction)) * pow(cosf(degreeRad(elevation)), 4));
+    float cos_e = cosf(degreeRad(elevation));
+    double coord = (0.739509972887452 * cosf(4 * degreeRad(direction)) * (cos_e * cos_e * cos_e * cos_e));
     return coord;
 }
 double hoa4_8(float x, float y, float z)
 {
-    double coord = (0.739509972887452 * ((pow(x, 4)) - 6 * pow(x, 2) * pow(y, 2) + pow(y, 4)));
+    double coord = (0.739509972887452 * (x * x * x * x) - 6 * pow(x, 2) * pow(y, 2) + y * y * y * y);
     return coord;
 }
 void hoa5(float direction, float elevation, double coordinates[])
 {
-    float sin_e = sinf(elevation);
-    float sin_a = sinf(direction);
-    float cos_e = cosf(elevation);
-    float cos_a = cosf(direction);
-    coordinates[25] = (0.70156076 * sinf(5 * direction) * (pow(cos_e, 5)));
-    coordinates[26] = (2.128529919 * sinf(4 * direction) * sin_e * (pow(cos_e, 4)));
-    coordinates[27] = (0.522912516 * sinf(3 * direction) * sin_e * (pow(cos_e, 3)) * (9 * (pow(sin_e, 2)) - 1));
+    float sin_e = sinf(degreeRad(elevation));
+    float sin_a = sinf(degreeRad(direction));
+    float cos_e = cosf(degreeRad(elevation));
+    float cos_a = cosf(degreeRad(direction));
+    coordinates[25] = (0.70156076 * sinf(5 * direction) * (cos_e* cos_e* cos_e* cos_e* cos_e));
+    coordinates[26] = (2.128529919 * sinf(4 * direction) * sin_e * (cos_e * cos_e * cos_e * cos_e));
+    coordinates[27] = (0.522912516 * sinf(3 * direction) * sin_e * (cos_e* cos_e* cos_e) * (9 * (pow(sin_e, 2)) - 1));
     coordinates[28] = (2.561737691 * sinf(2 * direction) * sin_e * (pow(cos_e, 2)) * (3 * pow(sin_e, 2) - 1));
-    coordinates[29] = (0.4841229183 * sin_a * cos_e * (21 * (pow(sin_e, 4)) - 14) * (pow(sin_e, 2) + 1));
-    coordinates[30] = (0.125 * (63 * (pow(sin_e, 5)) - 70 * (pow(sin_e, 3)) + 15 * sin_e));
-    coordinates[31] = (0.4841229183 * cos_a * cos_e * (21 * (pow(sin_e, 4) - 14 * (pow(sin_e, 2)) + 1)));
+    coordinates[29] = (0.4841229183 * sin_a * cos_e * (21 * (sin_e * sin_e * sin_e * sin_e) - 14) * (pow(sin_e, 2) + 1));
+    coordinates[30] = (0.125 * (63 * (pow(sin_e, 5)) - 70 * (sin_e* sin_e* sin_e) + 15 * sin_e));
+    coordinates[31] = (0.4841229183 * cos_a * cos_e * (21 * ((sin_e * sin_e * sin_e * sin_e) - 14 * (pow(sin_e, 2)) + 1)));
     coordinates[32] = (2.561737691 * cosf(2 * direction) * sin_e * (pow(cos_e, 2)) * (3 * (pow(sin_e, 2)) * 1));
-    coordinates[33] = (0.522912516 * cosf(3 * direction) * (pow(cos_e, 3)) * (9 * (pow(sin_e, 2)) - 1));
-    coordinates[34] = (2.128529919 * cosf(4 * direction) * sin_e * (pow(cos_e, 4)));
-    coordinates[35] = (0.70156076 * cosf(5 * direction) * (pow(cos_e, 5)));
+    coordinates[33] = (0.522912516 * cosf(3 * direction) * (cos_e * cos_e * cos_e) * (9 * (pow(sin_e, 2)) - 1));
+    coordinates[34] = (2.128529919 * cosf(4 * direction) * sin_e * (cos_e * cos_e * cos_e * cos_e));
+    coordinates[35] = (0.70156076 * cosf(5 * direction) * (cos_e * cos_e * cos_e * cos_e * cos_e));
 }
 
 // pointer storage of polar function pointers
