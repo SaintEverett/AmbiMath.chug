@@ -41,6 +41,17 @@ CK_DLL_TICK(ambimath_tick);
 t_CKINT ambimath_data_offset = 0;
 int mode = 0;
 
+struct storageCloset
+{
+    double coordinates[64];
+    float direction;
+    float elevation;
+    float radius;
+    double x;
+    double y;
+    double z;
+};
+
 /*
 // array of coordinate function pointers
 typedef double (*func_storage) ();
@@ -74,12 +85,74 @@ public:
         return p;
     }
 
+    void setDirection(float direction)
+    {
+        class_storage.direction = direction;
+    }
+    void setElevation(float elevation)
+    {
+        class_storage.elevation = elevation;
+    }
+    void setRadius(float radius)
+    {
+        class_storage.radius = radius;
+    }
+    void setCoordinates(double coordinates[])
+    {
+        for (int i = 0; i < 64; i++)
+        {
+            class_storage.coordinates[i] = coordinates[i];
+        }
+    }
+    void setX(double x)
+    {
+        class_storage.x = x;
+    }
+    void setY(double y)
+    {
+        class_storage.y = y;
+    }
+    void setZ(double z)
+    {
+        class_storage.z = z;
+    }
+
+    float getDirection()
+    {
+        return class_storage.direction;
+    }
+    float getElevation()
+    {
+        return class_storage.elevation;
+    }
+    float getRadius()
+    {
+        return class_storage.radius;
+    }
+    double getIndex(int i)
+    {
+        return class_storage.coordinates[i];
+    }
+    double getX()
+    {
+        return class_storage.x;
+    }
+    double getY()
+    {
+        return class_storage.y;
+    }
+    double getZ()
+    {
+        return class_storage.z;
+    }
+
     // get parameter example
     t_CKFLOAT getParam() { return m_param; }
 
 private:
     // instance data
     t_CKFLOAT m_param;
+    storageCloset class_storage;
 };
 
 
@@ -428,11 +501,16 @@ CK_DLL_MFUN(ambimath_getParam)
 
 CK_DLL_MFUN(all_CoordinatePolar)
 {
+    // get our c++ class pointer
+    AmbiMath* am_obj = (AmbiMath*)OBJ_MEMBER_INT(SELF, ambimath_data_offset);
     double chuginCoordinates[64];
     t_CKFLOAT direction = GET_NEXT_FLOAT(ARGS);
     t_CKFLOAT elevation = GET_NEXT_FLOAT(ARGS);
     Chuck_ArrayFloat* coordinates = (Chuck_ArrayFloat*)GET_NEXT_OBJECT(ARGS);
     t_CKINT order = GET_NEXT_INT(ARGS);
+    am_obj->setDirection(direction);
+    am_obj->setElevation(elevation);
+    am_obj->setCoordinates(chuginCoordinates);
     int size = (API->object->array_float_size(coordinates));
     int num_speakers = pow((order + 1), 2);
     if (size >= num_speakers)
@@ -471,12 +549,18 @@ CK_DLL_MFUN(all_CoordinatePolar)
 
 CK_DLL_MFUN(all_CoordinateCartesian)
 {
+    // get our c++ class pointer
+    AmbiMath* am_obj = (AmbiMath*)OBJ_MEMBER_INT(SELF, ambimath_data_offset);
     double chuginCoordinates[64];
     t_CKFLOAT x_ = GET_NEXT_FLOAT(ARGS);
     t_CKFLOAT y_ = GET_NEXT_FLOAT(ARGS);
     t_CKFLOAT z_ = GET_NEXT_FLOAT(ARGS);
     Chuck_ArrayFloat* coordinates = (Chuck_ArrayFloat*)GET_NEXT_OBJECT(ARGS);
     t_CKINT order = GET_NEXT_INT(ARGS);
+    am_obj->setX(x_);
+    am_obj->setY(y_);
+    am_obj->setZ(z_);
+    am_obj->setCoordinates(chuginCoordinates);
     int size = (API->object->array_float_size(coordinates));
     int num_speakers = pow((order + 1), 2);
     if (size >= num_speakers)
