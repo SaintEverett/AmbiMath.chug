@@ -503,45 +503,52 @@ CK_DLL_MFUN(all_CoordinatePolar)
 {
     // get our c++ class pointer
     AmbiMath* am_obj = (AmbiMath*)OBJ_MEMBER_INT(SELF, ambimath_data_offset);
-    double chuginCoordinates[64];
+    double polarCoordinates[64];
     t_CKFLOAT direction = GET_NEXT_FLOAT(ARGS);
     t_CKFLOAT elevation = GET_NEXT_FLOAT(ARGS);
     Chuck_ArrayFloat* coordinates = (Chuck_ArrayFloat*)GET_NEXT_OBJECT(ARGS);
     t_CKINT order = GET_NEXT_INT(ARGS);
     am_obj->setDirection(direction);
     am_obj->setElevation(elevation);
-    am_obj->setCoordinates(chuginCoordinates);
+    am_obj->setCoordinates(polarCoordinates);
     int size = (API->object->array_float_size(coordinates));
     int num_speakers = pow((order + 1), 2);
     if (size >= num_speakers)
     {
-        all(direction, elevation, chuginCoordinates, order);
-        if (order == 1)
+        all(direction, elevation, polarCoordinates, order);
+        if (order == 1 && size >= 4)
         {
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < size; i++)
             {
-                API->object->array_float_set_idx(coordinates, i, chuginCoordinates[i]);
+                API->object->array_float_set_idx(coordinates, i, polarCoordinates[i]);
             }
         }
-        else if (order == 2)
+        else if (order == 2 && size >= 9)
         {
-            for (int i = 0; i < 9; i++)
+            for (int i = 0; i < size; i++)
             {
-                API->object->array_float_set_idx(coordinates, i, chuginCoordinates[i]);
+                API->object->array_float_set_idx(coordinates, i, polarCoordinates[i]);
             }
         }
-        else if (order == 3)
+        else if (order == 3 && size >= 16)
         {
-            for (int i = 0; i < 16; i++)
+            for (int i = 0; i < size; i++)
             {
-                API->object->array_float_set_idx(coordinates, i, chuginCoordinates[i]);
+                API->object->array_float_set_idx(coordinates, i, polarCoordinates[i]);
             }
         }
-        else if (order == 4)
+        else if (order == 4 && size >= 25)
         {
-            for (int i = 0; i < 25; i++)
+            for (int i = 0; i < size; i++)
             {
-                API->object->array_float_set_idx(coordinates, i, chuginCoordinates[i]);
+                API->object->array_float_set_idx(coordinates, i, polarCoordinates[i]);
+            }
+        }
+        else if (order == 5 && size >= 36)
+        {
+            for (int i = 0; i < size; i++)
+            {
+                API->object->array_float_set_idx(coordinates, i, polarCoordinates[i]);
             }
         }
     }
@@ -551,7 +558,7 @@ CK_DLL_MFUN(all_CoordinateCartesian)
 {
     // get our c++ class pointer
     AmbiMath* am_obj = (AmbiMath*)OBJ_MEMBER_INT(SELF, ambimath_data_offset);
-    double chuginCoordinates[64];
+    double cartCoordinates[64];
     t_CKFLOAT x_ = GET_NEXT_FLOAT(ARGS);
     t_CKFLOAT y_ = GET_NEXT_FLOAT(ARGS);
     t_CKFLOAT z_ = GET_NEXT_FLOAT(ARGS);
@@ -560,38 +567,45 @@ CK_DLL_MFUN(all_CoordinateCartesian)
     am_obj->setX(x_);
     am_obj->setY(y_);
     am_obj->setZ(z_);
-    am_obj->setCoordinates(chuginCoordinates);
+    am_obj->setCoordinates(cartCoordinates);
     int size = (API->object->array_float_size(coordinates));
     int num_speakers = pow((order + 1), 2);
     if (size >= num_speakers)
     {
-        all(x_, y_, z_, chuginCoordinates, order);
-        if (order == 1)
+        all(x_, y_, z_, cartCoordinates, order);
+        if (order == 1 && size >= 4)
         {
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < size; i++)
             {
-                API->object->array_float_set_idx(coordinates, i, chuginCoordinates[i]);
+                API->object->array_float_set_idx(coordinates, i, cartCoordinates[i]);
             }
         }
-        else if (order == 2)
+        else if (order == 2 && size >= 9)
         {
-            for (int i = 0; i < 9; i++)
+            for (int i = 0; i < size; i++)
             {
-                API->object->array_float_set_idx(coordinates, i, chuginCoordinates[i]);
+                API->object->array_float_set_idx(coordinates, i, cartCoordinates[i]);
             }
         }
-        else if (order == 3)
+        else if (order == 3 && size >= 16)
         {
-            for (int i = 0; i < 16; i++)
+            for (int i = 0; i < size; i++)
             {
-                API->object->array_float_set_idx(coordinates, i, chuginCoordinates[i]);
+                API->object->array_float_set_idx(coordinates, i, cartCoordinates[i]);
             }
         }
-        else if (order == 4)
+        else if (order == 4 && size >= 25)
         {
-            for (int i = 0; i < 25; i++)
+            for (int i = 0; i < size; i++)
             {
-                API->object->array_float_set_idx(coordinates, i, chuginCoordinates[i]);
+                API->object->array_float_set_idx(coordinates, i, cartCoordinates[i]);
+            }
+        }
+        else if (order == 5 && size >= 36)
+        {
+            for (int i = 0; i < size; i++)
+            {
+                API->object->array_float_set_idx(coordinates, i, cartCoordinates[i]);
             }
         }
     }

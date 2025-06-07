@@ -19,6 +19,7 @@
 //        {
 //           AmbiDeco.chan(i) => dac.chan(i);
 //        }
+// 3. Index 34 is not aligned. I believe the polar equation is accurate, but something is wrong with the cartesian formulation.
 // 
 //-----------------------------------------------------------------------------
 #include "chugin.h"
@@ -282,7 +283,7 @@ double hoa4_8(float direction, float elevation)
 }
 double hoa4_8(float x, float y, float z)
 {
-    double coord = (0.739509972887452 * (x * x * x * x) - 6 * pow(x, 2) * pow(y, 2) + y * y * y * y);
+    double coord = (0.739509972887452 * ((x * x * x * x) - 6 * pow(x, 2) * pow(y, 2) + (y * y * y * y)));
     return coord;
 }
 void hoa5(float direction, float elevation, double coordinates[])
@@ -296,12 +297,29 @@ void hoa5(float direction, float elevation, double coordinates[])
     coordinates[27] = (0.522912516 * sinf(3 * direction) * sin_e * (cos_e* cos_e* cos_e) * (9 * (pow(sin_e, 2)) - 1));
     coordinates[28] = (2.561737691 * sinf(2 * direction) * sin_e * (pow(cos_e, 2)) * (3 * pow(sin_e, 2) - 1));
     coordinates[29] = (0.4841229183 * sin_a * cos_e * (21 * (sin_e * sin_e * sin_e * sin_e) - 14) * (pow(sin_e, 2) + 1));
-    coordinates[30] = (0.125 * (63 * (pow(sin_e, 5)) - 70 * (sin_e* sin_e* sin_e) + 15 * sin_e));
+    coordinates[30] = (0.125 * (63 * (sin_e * sin_e * sin_e * sin_e * sin_e) - 70 * (sin_e * sin_e * sin_e) + 15 * sin_e));
     coordinates[31] = (0.4841229183 * cos_a * cos_e * (21 * ((sin_e * sin_e * sin_e * sin_e) - 14 * (pow(sin_e, 2)) + 1)));
     coordinates[32] = (2.561737691 * cosf(2 * direction) * sin_e * (pow(cos_e, 2)) * (3 * (pow(sin_e, 2)) * 1));
     coordinates[33] = (0.522912516 * cosf(3 * direction) * (cos_e * cos_e * cos_e) * (9 * (pow(sin_e, 2)) - 1));
     coordinates[34] = (2.128529919 * cosf(4 * direction) * sin_e * (cos_e * cos_e * cos_e * cos_e));
     coordinates[35] = (0.70156076 * cosf(5 * direction) * (cos_e * cos_e * cos_e * cos_e * cos_e));
+}
+void hoa5(float x, float y, float z, double coordinates[])
+{
+    float x_2 = x * x;
+    float y_2 = y * y;
+    float z_2 = z * z;
+    coordinates[25] = (0.70156076 * y * (5 * (x_2 * x_2) - 10 * x_2 * x_2 + (y_2 * y_2)));
+    coordinates[26] = (8.874119675 * x * y * z * (x_2 - y_2));
+    coordinates[27] = (0.522912516 * y * ((y_2 * y_2) - 2 * x_2 * y_2 - 3 * (x_2 * x_2) - 8 * y_2 * z_2 + 24 * x_2 * z_2));
+    coordinates[28] = (5.123475383 * x * y * z * (2 * z_2 * -x_2 - y_2));
+    coordinates[29] = (0.4841229183 * y * ((x_2 * x_2) + 2 * x_2 * y_2 + (y_2 * y_2) - 12 * x_2 * z_2 - 12 * y_2 * z_2 + 8 * (z_2 * z_2)));
+    coordinates[30] = (0.125 * z * (63 * (z_2 * z_2) - 70 * z_2 + 15));
+    coordinates[31] = (0.4841229183 * x * ((x_2 * x_2) + 2 * x_2 * y_2 + (y_2 * y_2) - 12 * x_2 * z_2 - 12 * y_2 * z_2 + 8 * (z_2 * z_2)));
+    coordinates[32] = (2.561737691 * z * (2 * x_2 * z_2 - 2 * y_2 * z_2 - (x_2 * x_2) + (y_2 * y_2)));
+    coordinates[33] = (0.522912516 * x * (2 * x_2 * y_2 + 8 * x_2 * z_2 - 24 * y_2 * z_2 * (x_2 * x_2) + 3 * (y_2 * y_2)));
+    coordinates[34] = (2.218529919 * z * ((x_2 * x_2) - 6 * x_2 * y_2 + (y_2 * y_2)));
+    coordinates[35] = (0.70156076 * x * ((x_2 * x_2) - 10 * x_2 * y_2 + 5 * (y_2 * y_2)));
 }
 
 // pointer storage of polar function pointers
@@ -313,19 +331,98 @@ cartesianFuncStorage cartesianFunctions[] = { w,y,z,x,v,t,r,s,u,q,o,m,k,l,n,p,ho
 
 void all(float direction, float elevation, double coordinates[], int order)
 {
-    int numStream = pow((order + 1), 2);
-    for (int i = 0; i < numStream; i++)
+    int size = (sizeof(coordinates) / sizeof(coordinates[0]));
+    float direction_r = degreeRad(direction);
+    float elevation_r = degreeRad(elevation);
+    float sin_e = sinf(elevation_r);
+    float sin_a = sinf(direction_r);
+    float cos_e = cosf(elevation_r);
+    float cos_a = cosf(direction_r);
+    if (size)
     {
-        coordinates[i] = polarFunctions[i](direction, elevation);
+        coordinates[0] = w_constant;
+        coordinates[1] = sin_a * cos_e;
+        coordinates[2] = sin_e;
+        coordinates[3] = cos_a * cos_e;
+        coordinates[4] = (0.8660254038 * (2 * cos_a * sin_a) * pow(cos_e, 2));
+        coordinates[5] = (0.8660254038 * sin_a * (2 * cos_e * sin_e));
+        coordinates[6] = (0.5 * (3 * pow(sin_e, 2) - 1));
+        coordinates[7] = (0.8660254038 * (cos_a * (2 * cos_e * sin_e)));
+        coordinates[8] = (0.8660254038 * cosf(2 * direction_r) * pow(cos_e, 2));
+        coordinates[9] = (0.790569415 * sinf(3 * direction_r) * (cos_e * cos_e * cos_e));
+        coordinates[10] = (1.936491673 * (2 * cos_a * sin_a) * sin_e * pow(cos_e, 2));
+        coordinates[11] = (0.6123724357 * sin_a * cos_e * (5 * pow(sin_e, 2) - 1));
+        coordinates[12] = (0.5 * sin_e * (5 * pow(sin_e, 2) - 3));
+        coordinates[13] = (0.6123724357 * cos_a * cos_e * (5 * pow(sin_e, 2) - 1));
+        coordinates[14] = (1.936491673 * cosf(2 * direction_r) * sin_e * pow(cos_e, 2));
+        coordinates[15] = (0.790569415 * cosf(3 * direction_r) * (cos_e * cos_e * cos_e));
+        coordinates[16] = (0.739509972887452 * sinf(4 * direction_r) * (sin_e * sin_e * sin_e * sin_e));
+        coordinates[17] = (2.091650066335189 * sinf(3 * direction_r) * sin_e * (cos_e * cos_e * cos_e));
+        coordinates[18] = (0.5590169943749474 * sinf(2 * direction_r) * pow(cos_e, 2) * (7 * pow(sin_e, 2) - 1));
+        coordinates[19] = (0.3952847075210474 * sin_a * (2 * cos_e * sin_e) * (7 * pow(sin_e, 2) - 3));
+        coordinates[20] = (0.125 * (35 * (sin_e * sin_e * sin_e * sin_e) - 30 * pow(sin_e, 2) + 3));
+        coordinates[21] = (0.3952847075210474 * cos_a * (2 * cos_e * sin_e) * (7 * pow(sin_e, 2) - 3));
+        coordinates[22] = (0.5590169943749474 * cosf(2 * direction_r) * pow(cos_e, 2) * (7 * pow(sin_e, 2) - 1));
+        coordinates[23] = (2.091650066335189 * cosf(3 * direction_r) * sin_e * (cos_e * cos_e * cos_e));
+        coordinates[24] = (0.739509972887452 * cosf(4 * direction_r) * (cos_e * cos_e * cos_e * cos_e));
+        coordinates[25] = (0.70156076 * sinf(5 * direction_r) * (cos_e * cos_e * cos_e * cos_e * cos_e));
+        coordinates[26] = (2.128529919 * sinf(4 * direction_r) * sin_e * (cos_e * cos_e * cos_e * cos_e));
+        coordinates[27] = (0.522912516 * sinf(3 * direction_r) * (cos_e * cos_e * cos_e) * (9 * pow(sin_e, 2) - 1));
+        coordinates[28] = (2.561737691 * (2 * cos_a * sin_a) * sin_e * pow(cos_e, 2) * (3 * pow(sin_e, 2) - 1));
+        coordinates[29] = (0.4841229183 * sin_a * cos_e * (21 * (sin_e * sin_e * sin_e * sin_e) - 14 * pow(sin_e, 2) + 1));
+        coordinates[30] = (0.125 * (63 * (sin_e * sin_e * sin_e * sin_e * sin_e) - 70 * (sin_e * sin_e * sin_e) + 15 * sin_e));
+        coordinates[31] = (0.4841229183 * cos_a * cos_e * (21 * (sin_e * sin_e * sin_e * sin_e) - 14 * pow(sin_e, 2) + 1));
+        coordinates[32] = (2.561737691 * cosf(2 * direction_r) * sin_e * pow(cos_e, 2) * (3 * pow(sin_e, 2) * 1));
+        coordinates[33] = (0.522912516 * cosf(3 * direction_r) * (cos_e * cos_e * cos_e) * (9 * pow(sin_e, 2) - 1));
+        coordinates[34] = (2.218529919 * cosf(4 * direction_r) * sin_e * (cos_e * cos_e * cos_e * cos_e));
+        coordinates[35] = (0.70156076 * cosf(5 * direction_r) * (cos_e * cos_e * cos_e * cos_e * cos_e));
     }
 }
 
 void all(float x, float y, float z, double coordinates[], int order)
 {
-    int numStream = pow((order + 1), 2);
-    for (int i = 0; i < numStream; i++)
+    int size = (sizeof(coordinates) / sizeof(coordinates[0]));
+    float x_2 = x * x;
+    float y_2 = y * y;
+    float z_2 = z * z;
+    if (size)
     {
-        coordinates[i] = cartesianFunctions[i](x, y, z);
+        coordinates[0] = w_constant; // w
+        coordinates[1] = y; // y
+        coordinates[2] = z; // z 
+        coordinates[3] = x; // x 
+        coordinates[4] = (1.732050807568877 * x * y); //v 
+        coordinates[5] = (1.732050807568877 * y * z); // t
+        coordinates[6] = (0.5 * (3 * z_2 - 1)); // r
+        coordinates[7] = (1.732050807568877 * x * z); // s
+        coordinates[8] = (0.8660254037844386 * (x_2 - y_2)); // u
+        coordinates[9] = (0.790569415 * y * ((3 * x_2) - y_2)); // q
+        coordinates[10] = (3.872983346207417 * x * y * z); // o
+        coordinates[11] = (0.6123724356957945 * y * (5 * z_2 - 1)); // m
+        coordinates[12] = (0.5 * z * (5 * z_2 - 3)); // k
+        coordinates[13] = (0.6123724356957945 * x * (5 * z_2 - 1)); // l
+        coordinates[14] = (1.936491673 * z * (x_2 - y_2)); // n
+        coordinates[15] = (0.790569415 * x * (x_2 - (3 * y_2))); // p
+        coordinates[16] = (2.958039892 * x * y * (x_2 - y_2));
+        coordinates[17] = (2.091650066335189 * y * z * ((3 * (x_2)-y_2)));
+        coordinates[18] = (1.118033989 * x * y * (7 * z_2 - 1));
+        coordinates[19] = (0.790569415 * y * z * (7 * z_2 - 3));
+        coordinates[20] = (0.125 * (35 * (z * z * z * z) - 30 * z_2 + 3));
+        coordinates[21] = (0.790569415 * x * z * (7 * z_2 - 3));
+        coordinates[22] = (0.5590169944 * (x_2 - y_2) * (7 * z_2 - 1));
+        coordinates[23] = (2.091650066335189 * x * z * ((x_2 - (3 * y_2))));
+        coordinates[24] = (0.739509972887452 * ((x_2 * x_2) - 6 * x_2 * y_2 + (y_2 * y_2)));
+        coordinates[25] = (0.70156076 * y * (5 * (x_2 * x_2) - 10 * x_2 * x_2 + (y_2 * y_2)));
+        coordinates[26] = (8.874119675 * x * y * z * (x_2 - y_2));
+        coordinates[27] = (0.522912516 * y * ((y_2 * y_2) - 2 * x_2 * y_2 - 3 * (x_2 * x_2) - 8 * y_2 * z_2 + 24 * x_2 * z_2));
+        coordinates[28] = (5.123475383 * x * y * z * (2 * z_2 - x_2 - y_2));
+        coordinates[29] = (0.4841229183 * y * ((x_2 * x_2) + 2 * x_2 * y_2 + (y_2 * y_2) - 12 * x_2 * z_2 - 12 * y_2 * z_2 + 8 * (z_2 * z_2)));
+        coordinates[30] = (0.125 * z * (63 * (z_2 * z_2) - 70 * z_2 + 15));
+        coordinates[31] = (0.4841229183 * x * ((x_2 * x_2) + 2 * x_2 * y_2 + (y_2 * y_2) - 12 * x_2 * z_2 - 12 * y_2 * z_2 + 8 * (z_2 * z_2)));
+        coordinates[32] = (2.561737691 * z * (2 * x_2 * z_2 - 2 * y_2 * z_2 - (x_2 * x_2) + (y_2 * y_2)));
+        coordinates[33] = (0.522912516 * x * (2 * x_2 * y_2 + 8 * x_2 * z_2 - 24 * y_2 * z_2 * (x_2 * x_2) + 3 * (y_2 * y_2)));
+        coordinates[34] = (2.218529919 * z * ((x_2 * x_2) - (6 * x_2 * y_2) + (y_2 * y_2)));
+        coordinates[35] = (0.70156076 * x * ((x_2 * x_2) - 10 * x_2 * y_2 + 5 * (y_2 * y_2)));
     }
 }
 
