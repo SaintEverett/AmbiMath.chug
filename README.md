@@ -11,7 +11,7 @@
 ## About the Project
 
 ### Features
-- Up to 3rd order SN3D ambisonic coordinate systems.
+- Up to 5th order SN3D ambisonic coordinate systems.
 - Individual or all coordinates calculable at any time.
 
 
