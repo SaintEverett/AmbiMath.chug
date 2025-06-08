@@ -2,6 +2,7 @@ AmbiMath test;
 
 float polarcoordinates[36];
 float cartcoordinates[36];
+float check[36];
 5 => int order;
 
 test.all(45,30,polarcoordinates,order);

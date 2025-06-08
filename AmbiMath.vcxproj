@@ -18,13 +18,20 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <None Include=".gitattributes" />
+    <None Include=".gitignore" />
     <None Include="AmbiMath-test.ck" />
+    <None Include="chuckscript\all_test.ck" />
     <None Include="chuckscript\AmbiMath-test.ck" />
+    <None Include="chuckscript\another_check_script.ck" />
     <None Include="chuckscript\class_chug_check.ck" />
+    <None Include="LICENSE" />
     <None Include="makefile" />
     <None Include="makefile.linux" />
     <None Include="makefile.mac" />
     <None Include="makefile.win" />
+    <None Include="README.md" />
+    <None Include="SECURITY.md" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\AmbiMath.cpp" />

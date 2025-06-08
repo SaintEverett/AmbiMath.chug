@@ -25,9 +25,6 @@
 #include <math.h>
 #include <stdlib.h>
 
-static int w_constant = 1;
-static double g_pi = CK_ONE_PI;
-
 // declaration of chugin constructor
 CK_DLL_CTOR(ambimath_ctor);
 // declaration of chugin desctructor
@@ -44,95 +41,22 @@ CK_DLL_TICK(ambimath_tick);
 t_CKINT ambimath_data_offset = 0;
 int mode = 0;
 
-// convert degrees to radians
-static float degreeRad(float degree)
+struct storageCloset
 {
-    return (g_pi / 180) * degree;
-}
-// ambisonic maths
-static float x(float direction, float elevation)
-{
-    double x = (cos(degreeRad(direction)) * cos(degreeRad(elevation)));
-    return x;
-}
-static float y(float direction, float elevation)
-{
-    double y = ((sin(degreeRad(direction))) * (cos(degreeRad(elevation))));
-    return y;
-}
-static float z(float direction, float elevation)
-{
-    double z = (sin(degreeRad(elevation)));
-    return z;
-}
-static float w(float direction, float elevation)
-{
-    return w_constant;
-}
-static float r(float direction, float elevation)
-{
-    double r = (0.5 * (3 * (pow((sin(degreeRad(elevation))), 2)) - 1));
-    return r;
-}
-static float s(float direction, float elevation)
-{
-    double s = (0.8660254038 * (cos(degreeRad(direction))) * (sin((2 * degreeRad(elevation)))));
-    return s;
-}
-static float t(float direction, float elevation)
-{
-    double t = (0.8660254038 * (sin(degreeRad(direction))) * (sin((2 * degreeRad(elevation)))));
-    return t;
-}
-static float u(float direction, float elevation)
-{
-    double u = (0.8660254038 * cos(2 * degreeRad(direction)) * pow(cos(degreeRad(elevation)), 2));
-    return u;
-}
-static float v(float direction, float elevation)
-{
-    double v = (0.8660254038 * sin(2 * degreeRad(direction)) * pow(cos(degreeRad(elevation)), 2));
-    return v;
-}
-static float l(float direction, float elevation)
-{
-    double l = (0.6123724357 * cos(degreeRad(direction)) * cos(degreeRad(elevation)) * (5 * pow(sin(degreeRad(elevation)), 2) - 1));
-    return l;
-}
-static float m(float direction, float elevation)
-{
-    double m = (0.6123724357 * sin(degreeRad(direction)) * cos(degreeRad(elevation)) * (5 * pow(sin(degreeRad(elevation)), 2) - 1));
-    return m;
-}
-static float o(float direction, float elevation)
-{
-    double o = (1.936491673 * sin(2 * degreeRad(direction)) * sin(degreeRad(elevation)) * pow(cos(degreeRad(elevation)), 2));
-    return o;
-}
-static float n(float direction, float elevation)
-{
-    double n = (1.936491673 * cos(2 * degreeRad(direction)) * sin(degreeRad(elevation)) * pow(cos(degreeRad(elevation)), 2));
-    return n;
-}
-static float p(float direction, float elevation)
-{
-    double p = (0.790569415 * cos(3 * degreeRad(direction)) * pow(cos(degreeRad(elevation)), 3));
-    return p;
-}
-static float q(float direction, float elevation)
-{
-    double q = (0.790569415 * sin(3 * degreeRad(direction)) * pow(cos(degreeRad(elevation)), 3));
-    return q;
-}
-static float k(float direction, float elevation)
-{
-    double k = (0.5 * sin(degreeRad(elevation)) * (5 * pow(sin(degreeRad(elevation)), 2) - 3));
-    return k;
-}
+    double coordinates[64];
+    float direction;
+    float elevation;
+    float radius;
+    double x;
+    double y;
+    double z;
+};
 
+/*
 // array of coordinate function pointers
-typedef float (*func_storage) (float direction, float elevation);
-func_storage funcs[] = {w,y,z,x,v,t,r,s,u,q,o,m,k,l,n,p}; // in spherical order
+typedef double (*func_storage) ();
+func_storage funcs[] = {w,y,z,x,v,t,r,s,u,q,o,m,k,l,n,p,hoa4_0,hoa4_1,hoa4_2,hoa4_3,hoa4_4,hoa4_5,hoa4_6,hoa4_7,hoa4_8}; // in spherical order
+*/
 
 //-----------------------------------------------------------------------------
 // class definition for internal chugin data
@@ -161,12 +85,74 @@ public:
         return p;
     }
 
+    void setDirection(float direction)
+    {
+        class_storage.direction = direction;
+    }
+    void setElevation(float elevation)
+    {
+        class_storage.elevation = elevation;
+    }
+    void setRadius(float radius)
+    {
+        class_storage.radius = radius;
+    }
+    void setCoordinates(double coordinates[])
+    {
+        for (int i = 0; i < 64; i++)
+        {
+            class_storage.coordinates[i] = coordinates[i];
+        }
+    }
+    void setX(double x)
+    {
+        class_storage.x = x;
+    }
+    void setY(double y)
+    {
+        class_storage.y = y;
+    }
+    void setZ(double z)
+    {
+        class_storage.z = z;
+    }
+
+    float getDirection()
+    {
+        return class_storage.direction;
+    }
+    float getElevation()
+    {
+        return class_storage.elevation;
+    }
+    float getRadius()
+    {
+        return class_storage.radius;
+    }
+    double getIndex(int i)
+    {
+        return class_storage.coordinates[i];
+    }
+    double getX()
+    {
+        return class_storage.x;
+    }
+    double getY()
+    {
+        return class_storage.y;
+    }
+    double getZ()
+    {
+        return class_storage.z;
+    }
+
     // get parameter example
     t_CKFLOAT getParam() { return m_param; }
 
 private:
     // instance data
     t_CKFLOAT m_param;
+    storageCloset class_storage;
 };
 
 
@@ -188,7 +174,6 @@ CK_DLL_INFO(AmbiMath)
     // (optional) contact email
     QUERY->setinfo(QUERY, CHUGIN_INFO_EMAIL, "");
 }
-
 
 //-----------------------------------------------------------------------------
 // query function: ChucK calls this when loading the chugin
@@ -222,103 +207,217 @@ CK_DLL_QUERY(AmbiMath)
     // QUERY->add_ugen_func( QUERY, ambimath_tick, NULL, 1, 1 );
     // NOTE: if this is to be a UGen with more than 1 channel,
     // e.g., a multichannel UGen -- will need to use add_ugen_funcf()
-    // and declare a tickf function using CK_DLL_TICKF  
+    // and declare a tickf function usinfg CK_DLL_TICKF  
     // function definition
 
-    // x coordinate
-    QUERY->add_mfun(QUERY, x_Coordinate, "float", "x");
+    // x coordinate(polar)
+    QUERY->add_mfun(QUERY, x_CoordinatePolar, "float", "x");
     QUERY->add_arg(QUERY, "float", "direction");
     QUERY->add_arg(QUERY, "float", "elevation");
     QUERY->doc_func(QUERY, "Computes cartesian X coordinate given elevation and direction angles");
 
-    // y coodinate
-    QUERY->add_mfun(QUERY, y_Coordinate, "float", "y");
+    // x coordinate(cartesian)
+    QUERY->add_mfun(QUERY, x_CoordinateCartesian, "float", "x");
+    QUERY->add_arg(QUERY, "float", "x");
+    QUERY->add_arg(QUERY, "float", "y");
+    QUERY->add_arg(QUERY, "float", "z");
+    QUERY->doc_func(QUERY, "Computes cartesian X coordinate given x,y,z");
+
+    // y coodinate(polar)
+    QUERY->add_mfun(QUERY, y_CoordinatePolar, "float", "y");
     QUERY->add_arg(QUERY, "float", "direction");
     QUERY->add_arg(QUERY, "float", "elevation");
     QUERY->doc_func(QUERY, "Computes cartesian Y coordinate given elevation and direction angles");
 
-    // z coordinate
-    QUERY->add_mfun(QUERY, z_Coordinate, "float", "z");
+    // y coordinate(cartesian)
+    QUERY->add_mfun(QUERY, y_CoordinateCartesian, "float", "y");
+    QUERY->add_arg(QUERY, "float", "x");
+    QUERY->add_arg(QUERY, "float", "y");
+    QUERY->add_arg(QUERY, "float", "z");
+    QUERY->doc_func(QUERY, "Computes cartesian Y coordinate given x,y,z");
+
+    // z coordinate(polar)
+    QUERY->add_mfun(QUERY, z_CoordinatePolar, "float", "z");
     QUERY->add_arg(QUERY, "float", "direction");
     QUERY->add_arg(QUERY, "float", "elevation");
     QUERY->doc_func(QUERY, "Computes cartesian Z coordinate given elevation and direction angles");
 
-    // r coordinate
-    QUERY->add_mfun(QUERY, r_Coordinate, "float", "r");
+    // z coordinate(cartesian)
+    QUERY->add_mfun(QUERY, z_CoordinateCartesian, "float", "z");
+    QUERY->add_arg(QUERY, "float", "x");
+    QUERY->add_arg(QUERY, "float", "y");
+    QUERY->add_arg(QUERY, "float", "z");
+    QUERY->doc_func(QUERY, "Computes cartesian Z coordinate given x,y,z");
+
+    // r coordinate(polar)
+    QUERY->add_mfun(QUERY, r_CoordinatePolar, "float", "r");
     QUERY->add_arg(QUERY, "float", "direction");
     QUERY->add_arg(QUERY, "float", "elevation");
     QUERY->doc_func(QUERY, "Computes cartesian R coordinate given elevation and direction angles");
 
-    // s coordinate
-    QUERY->add_mfun(QUERY, s_Coordinate, "float", "s");
+    // r coordinate(cartesian)
+    QUERY->add_mfun(QUERY, r_CoordinateCartesian, "float", "r");
+    QUERY->add_arg(QUERY, "float", "x");
+    QUERY->add_arg(QUERY, "float", "y");
+    QUERY->add_arg(QUERY, "float", "z");
+    QUERY->doc_func(QUERY, "Computes cartesian R coordinate given x,y,z");
+
+    // s coordinate(polar)
+    QUERY->add_mfun(QUERY, s_CoordinatePolar, "float", "s");
     QUERY->add_arg(QUERY, "float", "direction");
     QUERY->add_arg(QUERY, "float", "elevation");
     QUERY->doc_func(QUERY, "Computes cartesian S coordinate given elevation and direction angles");
 
-    // t coordinate
-    QUERY->add_mfun(QUERY, t_Coordinate, "float", "t");
+    // s coordinate(cartesian)
+    QUERY->add_mfun(QUERY, s_CoordinateCartesian, "float", "s");
+    QUERY->add_arg(QUERY, "float", "x");
+    QUERY->add_arg(QUERY, "float", "y");
+    QUERY->add_arg(QUERY, "float", "z");
+    QUERY->doc_func(QUERY, "Computes cartesian S coordinate given x,y,z");
+
+    // t coordinate(polar)
+    QUERY->add_mfun(QUERY, t_CoordinatePolar, "float", "t");
     QUERY->add_arg(QUERY, "float", "direction");
     QUERY->add_arg(QUERY, "float", "elevation");
     QUERY->doc_func(QUERY, "Computes cartesian T coordinate given elevation and direction angles");
 
-    // u coordinate
-    QUERY->add_mfun(QUERY, u_Coordinate, "float", "u");
+    // t coordinate(cartesian)
+    QUERY->add_mfun(QUERY, t_CoordinateCartesian, "float", "t");
+    QUERY->add_arg(QUERY, "float", "x");
+    QUERY->add_arg(QUERY, "float", "y");
+    QUERY->add_arg(QUERY, "float", "z");
+    QUERY->doc_func(QUERY, "Computes cartesian T coordinate given x,y,z");
+
+    // u coordinate(polar)
+    QUERY->add_mfun(QUERY, u_CoordinatePolar, "float", "u");
     QUERY->add_arg(QUERY, "float", "direction");
     QUERY->add_arg(QUERY, "float", "elevation");
     QUERY->doc_func(QUERY, "Computes cartesian U coordinate given elevation and direction angles");
 
-    // v coordinate
-    QUERY->add_mfun(QUERY, v_Coordinate, "float", "v");
+    // u coordinate(cartesian)
+    QUERY->add_mfun(QUERY, u_CoordinateCartesian, "float", "u");
+    QUERY->add_arg(QUERY, "float", "x");
+    QUERY->add_arg(QUERY, "float", "y");
+    QUERY->add_arg(QUERY, "float", "z");
+    QUERY->doc_func(QUERY, "Computes cartesian U coordinate given x,y,z");
+
+    // v coordinate(polar)
+    QUERY->add_mfun(QUERY, v_CoordinatePolar, "float", "v");
     QUERY->add_arg(QUERY, "float", "direction");
     QUERY->add_arg(QUERY, "float", "elevation");
     QUERY->doc_func(QUERY, "Computes cartesian V coordinate given elevation and direction angles");
 
-    // l coordinate
-    QUERY->add_mfun(QUERY, l_Coordinate, "float", "l");
+    // r coordinate(cartesian)
+    QUERY->add_mfun(QUERY, v_CoordinateCartesian, "float", "v");
+    QUERY->add_arg(QUERY, "float", "x");
+    QUERY->add_arg(QUERY, "float", "y");
+    QUERY->add_arg(QUERY, "float", "z");
+    QUERY->doc_func(QUERY, "Computes cartesian V coordinate given x,y,z");
+
+    // l coordinate(polar)
+    QUERY->add_mfun(QUERY, l_CoordinatePolar, "float", "l");
     QUERY->add_arg(QUERY, "float", "direction");
     QUERY->add_arg(QUERY, "float", "elevation");
     QUERY->doc_func(QUERY, "Computes cartesian L coordinate given elevation and direction angles");
 
-    // m coordinate
-    QUERY->add_mfun(QUERY, m_Coordinate, "float", "m");
+    // l coordinate(cartesian)
+    QUERY->add_mfun(QUERY, l_CoordinateCartesian, "float", "l");
+    QUERY->add_arg(QUERY, "float", "x");
+    QUERY->add_arg(QUERY, "float", "y");
+    QUERY->add_arg(QUERY, "float", "z");
+    QUERY->doc_func(QUERY, "Computes cartesian L coordinate given x,y,z");
+
+    // m coordinate(polar)
+    QUERY->add_mfun(QUERY, m_CoordinatePolar, "float", "m");
     QUERY->add_arg(QUERY, "float", "direction");
     QUERY->add_arg(QUERY, "float", "elevation");
     QUERY->doc_func(QUERY, "Computes cartesian M coordinate given elevation and direction angles");
 
-    // n coordinate
-    QUERY->add_mfun(QUERY, n_Coordinate, "float", "n");
+    // m coordinate(cartesian)
+    QUERY->add_mfun(QUERY, m_CoordinateCartesian, "float", "m");
+    QUERY->add_arg(QUERY, "float", "x");
+    QUERY->add_arg(QUERY, "float", "y");
+    QUERY->add_arg(QUERY, "float", "z");
+    QUERY->doc_func(QUERY, "Computes cartesian M coordinate given x,y,z");
+
+    // n coordinate(polar)
+    QUERY->add_mfun(QUERY, n_CoordinatePolar, "float", "n");
     QUERY->add_arg(QUERY, "float", "direction");
     QUERY->add_arg(QUERY, "float", "elevation");
     QUERY->doc_func(QUERY, "Computes cartesian N coordinate given elevation and direction angles");
 
-    // o coordinate
-    QUERY->add_mfun(QUERY, o_Coordinate, "float", "o");
+    // n coordinate(cartesian)
+    QUERY->add_mfun(QUERY, n_CoordinateCartesian, "float", "n");
+    QUERY->add_arg(QUERY, "float", "x");
+    QUERY->add_arg(QUERY, "float", "y");
+    QUERY->add_arg(QUERY, "float", "z");
+    QUERY->doc_func(QUERY, "Computes cartesian N coordinate given x,y,z");
+
+    // o coordinate(polar)
+    QUERY->add_mfun(QUERY, o_CoordinatePolar, "float", "o");
     QUERY->add_arg(QUERY, "float", "direction");
     QUERY->add_arg(QUERY, "float", "elevation");
     QUERY->doc_func(QUERY, "Computes cartesian O coordinate given elevation and direction angles");
 
-    // p coordinate
-    QUERY->add_mfun(QUERY, p_Coordinate, "float", "p");
+    // o coordinate(cartesian)
+    QUERY->add_mfun(QUERY, o_CoordinateCartesian, "float", "o");
+    QUERY->add_arg(QUERY, "float", "x");
+    QUERY->add_arg(QUERY, "float", "y");
+    QUERY->add_arg(QUERY, "float", "z");
+    QUERY->doc_func(QUERY, "Computes cartesian O coordinate given x,y,z");
+
+    // p coordinate(polar)
+    QUERY->add_mfun(QUERY, p_CoordinatePolar, "float", "p");
     QUERY->add_arg(QUERY, "float", "direction");
     QUERY->add_arg(QUERY, "float", "elevation");
     QUERY->doc_func(QUERY, "Computes cartesian P coordinate given elevation and direction angles");
 
-    // q coordinate
-    QUERY->add_mfun(QUERY, q_Coordinate, "float", "q");
+    // p coordinate(cartesian)
+    QUERY->add_mfun(QUERY, p_CoordinateCartesian, "float", "p");
+    QUERY->add_arg(QUERY, "float", "x");
+    QUERY->add_arg(QUERY, "float", "y");
+    QUERY->add_arg(QUERY, "float", "z");
+    QUERY->doc_func(QUERY, "Computes cartesian P coordinate given x,y,z");
+
+    // q coordinate(polar)
+    QUERY->add_mfun(QUERY, q_CoordinatePolar, "float", "q");
     QUERY->add_arg(QUERY, "float", "direction");
     QUERY->add_arg(QUERY, "float", "elevation");
     QUERY->doc_func(QUERY, "Computes cartesian Q coordinate given elevation and direction angles");
 
-    // k coordinate
-    QUERY->add_mfun(QUERY, k_Coordinate, "float", "k");
+    // q coordinate(cartesian)
+    QUERY->add_mfun(QUERY, q_CoordinateCartesian, "float", "q");
+    QUERY->add_arg(QUERY, "float", "x");
+    QUERY->add_arg(QUERY, "float", "y");
+    QUERY->add_arg(QUERY, "float", "z");
+    QUERY->doc_func(QUERY, "Computes cartesian Q coordinate given x,y,z");
+
+    // k coordinate(polar)
+    QUERY->add_mfun(QUERY, k_CoordinatePolar, "float", "k");
     QUERY->add_arg(QUERY, "float", "direction");
     QUERY->add_arg(QUERY, "float", "elevation");
     QUERY->doc_func(QUERY, "Computes cartesian K coordinate given elevation and direction angles");
 
+    // k coordinate(cartesian)
+    QUERY->add_mfun(QUERY, k_CoordinateCartesian, "float", "k");
+    QUERY->add_arg(QUERY, "float", "x");
+    QUERY->add_arg(QUERY, "float", "y");
+    QUERY->add_arg(QUERY, "float", "z");
+    QUERY->doc_func(QUERY, "Computes cartesian K coordinate given x,y,z");
+
     // all coordinates
-    QUERY->add_mfun(QUERY, all_Coordinates, "void", "all");
+    QUERY->add_mfun(QUERY, all_CoordinatePolar, "void", "all");
     QUERY->add_arg(QUERY, "float", "direction");
     QUERY->add_arg(QUERY, "float", "elevation");
+    QUERY->add_arg(QUERY, "float[]", "coordinates");
+    QUERY->add_arg(QUERY, "int", "order");
+    QUERY->doc_func(QUERY, "Computes all coordinates of a given order and returns an array of the corresponding size. Order of coordinates is X,Y,Z,W,V,T,R,S,U,Q,O,M,K,L,N,O.");
+
+    // all coordinates
+    QUERY->add_mfun(QUERY, all_CoordinateCartesian, "void", "all");
+    QUERY->add_arg(QUERY, "float", "x");
+    QUERY->add_arg(QUERY, "float", "y");
+    QUERY->add_arg(QUERY, "float", "z");
     QUERY->add_arg(QUERY, "float[]", "coordinates");
     QUERY->add_arg(QUERY, "int", "order");
     QUERY->doc_func(QUERY, "Computes all coordinates of a given order and returns an array of the corresponding size. Order of coordinates is X,Y,Z,W,V,T,R,S,U,Q,O,M,K,L,N,O.");
@@ -400,126 +499,341 @@ CK_DLL_MFUN(ambimath_getParam)
     RETURN->v_float = am_obj->getParam();
 }
 
-CK_DLL_MFUN(all_Coordinates)
+CK_DLL_MFUN(all_CoordinatePolar)
 {
+    // get our c++ class pointer
+    AmbiMath* am_obj = (AmbiMath*)OBJ_MEMBER_INT(SELF, ambimath_data_offset);
+    double polarCoordinates[64];
     t_CKFLOAT direction = GET_NEXT_FLOAT(ARGS);
     t_CKFLOAT elevation = GET_NEXT_FLOAT(ARGS);
     Chuck_ArrayFloat* coordinates = (Chuck_ArrayFloat*)GET_NEXT_OBJECT(ARGS);
     t_CKINT order = GET_NEXT_INT(ARGS);
+    am_obj->setDirection(direction);
+    am_obj->setElevation(elevation);
+    am_obj->setCoordinates(polarCoordinates);
     int size = (API->object->array_float_size(coordinates));
     int num_speakers = pow((order + 1), 2);
-    if (num_speakers == size)
+    if (size >= num_speakers)
     {
-        for (int i = 0; i < size; i++)
+        all(direction, elevation, polarCoordinates, order);
+        if (order == 1 && size >= 4)
         {
-            API->object->array_float_set_idx(coordinates, i, funcs[i](direction, elevation));
+            for (int i = 0; i < size; i++)
+            {
+                API->object->array_float_set_idx(coordinates, i, polarCoordinates[i]);
+            }
+        }
+        else if (order == 2 && size >= 9)
+        {
+            for (int i = 0; i < size; i++)
+            {
+                API->object->array_float_set_idx(coordinates, i, polarCoordinates[i]);
+            }
+        }
+        else if (order == 3 && size >= 16)
+        {
+            for (int i = 0; i < size; i++)
+            {
+                API->object->array_float_set_idx(coordinates, i, polarCoordinates[i]);
+            }
+        }
+        else if (order == 4 && size >= 25)
+        {
+            for (int i = 0; i < size; i++)
+            {
+                API->object->array_float_set_idx(coordinates, i, polarCoordinates[i]);
+            }
+        }
+        else if (order == 5 && size >= 36)
+        {
+            for (int i = 0; i < size; i++)
+            {
+                API->object->array_float_set_idx(coordinates, i, polarCoordinates[i]);
+            }
         }
     }
 }
 
-CK_DLL_MFUN(x_Coordinate)
+CK_DLL_MFUN(all_CoordinateCartesian)
+{
+    // get our c++ class pointer
+    AmbiMath* am_obj = (AmbiMath*)OBJ_MEMBER_INT(SELF, ambimath_data_offset);
+    double cartCoordinates[64];
+    t_CKFLOAT x_ = GET_NEXT_FLOAT(ARGS);
+    t_CKFLOAT y_ = GET_NEXT_FLOAT(ARGS);
+    t_CKFLOAT z_ = GET_NEXT_FLOAT(ARGS);
+    Chuck_ArrayFloat* coordinates = (Chuck_ArrayFloat*)GET_NEXT_OBJECT(ARGS);
+    t_CKINT order = GET_NEXT_INT(ARGS);
+    am_obj->setX(x_);
+    am_obj->setY(y_);
+    am_obj->setZ(z_);
+    am_obj->setCoordinates(cartCoordinates);
+    int size = (API->object->array_float_size(coordinates));
+    int num_speakers = pow((order + 1), 2);
+    if (size >= num_speakers)
+    {
+        all(x_, y_, z_, cartCoordinates, order);
+        if (order == 1 && size >= 4)
+        {
+            for (int i = 0; i < size; i++)
+            {
+                API->object->array_float_set_idx(coordinates, i, cartCoordinates[i]);
+            }
+        }
+        else if (order == 2 && size >= 9)
+        {
+            for (int i = 0; i < size; i++)
+            {
+                API->object->array_float_set_idx(coordinates, i, cartCoordinates[i]);
+            }
+        }
+        else if (order == 3 && size >= 16)
+        {
+            for (int i = 0; i < size; i++)
+            {
+                API->object->array_float_set_idx(coordinates, i, cartCoordinates[i]);
+            }
+        }
+        else if (order == 4 && size >= 25)
+        {
+            for (int i = 0; i < size; i++)
+            {
+                API->object->array_float_set_idx(coordinates, i, cartCoordinates[i]);
+            }
+        }
+        else if (order == 5 && size >= 36)
+        {
+            for (int i = 0; i < size; i++)
+            {
+                API->object->array_float_set_idx(coordinates, i, cartCoordinates[i]);
+            }
+        }
+    }
+}
+
+CK_DLL_MFUN(x_CoordinatePolar)
 {
     float direction = GET_NEXT_FLOAT(ARGS);
     float elevation = GET_NEXT_FLOAT(ARGS);
-    RETURN->v_float = x(direction, elevation);
+    RETURN->v_float = x(direction,elevation);
 }
 
-CK_DLL_MFUN(y_Coordinate)
+CK_DLL_MFUN(x_CoordinateCartesian)
+{
+    float x_ = GET_NEXT_FLOAT(ARGS);
+    float y_ = GET_NEXT_FLOAT(ARGS);
+    float z_ = GET_NEXT_FLOAT(ARGS);
+    RETURN->v_float = x(x_,y_,z_);
+}
+
+CK_DLL_MFUN(y_CoordinatePolar)
 {
     float direction = GET_NEXT_FLOAT(ARGS);
     float elevation = GET_NEXT_FLOAT(ARGS);
     RETURN->v_float = y(direction, elevation);
 }
 
-CK_DLL_MFUN(z_Coordinate)
+CK_DLL_MFUN(y_CoordinateCartesian)
+{
+    float x_ = GET_NEXT_FLOAT(ARGS);
+    float y_ = GET_NEXT_FLOAT(ARGS);
+    float z_ = GET_NEXT_FLOAT(ARGS);
+    RETURN->v_float = y(x_,y_,z_);
+}
+
+CK_DLL_MFUN(z_CoordinatePolar)
 {
     float direction = GET_NEXT_FLOAT(ARGS);
     float elevation = GET_NEXT_FLOAT(ARGS);
     RETURN->v_float = z(direction, elevation);
 }
 
-CK_DLL_MFUN(r_Coordinate)
+CK_DLL_MFUN(z_CoordinateCartesian)
+{
+    float x_ = GET_NEXT_FLOAT(ARGS);
+    float y_ = GET_NEXT_FLOAT(ARGS);
+    float z_ = GET_NEXT_FLOAT(ARGS);
+    RETURN->v_float = z(x_,y_,z_);
+}
+
+CK_DLL_MFUN(r_CoordinatePolar)
 {
     float direction = GET_NEXT_FLOAT(ARGS);
     float elevation = GET_NEXT_FLOAT(ARGS);
     RETURN->v_float = r(direction, elevation);
 }
 
-CK_DLL_MFUN(s_Coordinate)
+CK_DLL_MFUN(r_CoordinateCartesian)
+{
+    float x_ = GET_NEXT_FLOAT(ARGS);
+    float y_ = GET_NEXT_FLOAT(ARGS);
+    float z_ = GET_NEXT_FLOAT(ARGS);
+    RETURN->v_float = r(x_,y_,z_);
+}
+
+CK_DLL_MFUN(s_CoordinatePolar)
 {
     float direction = GET_NEXT_FLOAT(ARGS);
     float elevation = GET_NEXT_FLOAT(ARGS);
     RETURN->v_float = s(direction, elevation);
 }
 
-CK_DLL_MFUN(t_Coordinate)
+CK_DLL_MFUN(s_CoordinateCartesian)
+{
+    float x_ = GET_NEXT_FLOAT(ARGS);
+    float y_ = GET_NEXT_FLOAT(ARGS);
+    float z_ = GET_NEXT_FLOAT(ARGS);
+    RETURN->v_float = s(x_,y_,z_);
+}
+
+CK_DLL_MFUN(t_CoordinatePolar)
 {
     float direction = GET_NEXT_FLOAT(ARGS);
     float elevation = GET_NEXT_FLOAT(ARGS);
     RETURN->v_float = t(direction, elevation);
 }
 
-CK_DLL_MFUN(u_Coordinate)
+CK_DLL_MFUN(t_CoordinateCartesian)
+{
+    float x_ = GET_NEXT_FLOAT(ARGS);
+    float y_ = GET_NEXT_FLOAT(ARGS);
+    float z_ = GET_NEXT_FLOAT(ARGS);
+    RETURN->v_float = t(x_,y_,z_);
+}
+
+CK_DLL_MFUN(u_CoordinatePolar)
 {
     float direction = GET_NEXT_FLOAT(ARGS);
     float elevation = GET_NEXT_FLOAT(ARGS);
     RETURN->v_float = u(direction, elevation);
 }
 
-CK_DLL_MFUN(v_Coordinate)
+CK_DLL_MFUN(u_CoordinateCartesian)
+{
+    float x_ = GET_NEXT_FLOAT(ARGS);
+    float y_ = GET_NEXT_FLOAT(ARGS);
+    float z_ = GET_NEXT_FLOAT(ARGS);
+    RETURN->v_float = u(x_,y_,z_);
+}
+
+CK_DLL_MFUN(v_CoordinatePolar)
 {
     float direction = GET_NEXT_FLOAT(ARGS);
     float elevation = GET_NEXT_FLOAT(ARGS);
     RETURN->v_float = v(direction, elevation);
 }
 
-CK_DLL_MFUN(l_Coordinate)
+CK_DLL_MFUN(v_CoordinateCartesian)
+{
+    float x_ = GET_NEXT_FLOAT(ARGS);
+    float y_ = GET_NEXT_FLOAT(ARGS);
+    float z_ = GET_NEXT_FLOAT(ARGS);
+    RETURN->v_float = v(x_,y_,z_);
+}
+
+CK_DLL_MFUN(l_CoordinatePolar)
 {
     float direction = GET_NEXT_FLOAT(ARGS);
     float elevation = GET_NEXT_FLOAT(ARGS);
     RETURN->v_float = l(direction, elevation);
 }
 
-CK_DLL_MFUN(m_Coordinate)
+CK_DLL_MFUN(l_CoordinateCartesian)
+{
+    float x_ = GET_NEXT_FLOAT(ARGS);
+    float y_ = GET_NEXT_FLOAT(ARGS);
+    float z_ = GET_NEXT_FLOAT(ARGS);
+    RETURN->v_float = l(x_,y_,z_);
+}
+
+CK_DLL_MFUN(m_CoordinatePolar)
 {
     float direction = GET_NEXT_FLOAT(ARGS);
     float elevation = GET_NEXT_FLOAT(ARGS);
     RETURN->v_float = m(direction, elevation);
 }
 
-CK_DLL_MFUN(o_Coordinate)
+CK_DLL_MFUN(m_CoordinateCartesian)
+{
+    float x_ = GET_NEXT_FLOAT(ARGS);
+    float y_ = GET_NEXT_FLOAT(ARGS);
+    float z_ = GET_NEXT_FLOAT(ARGS);
+    RETURN->v_float = m(x_,y_,z_);
+}
+
+CK_DLL_MFUN(o_CoordinatePolar)
 {
     float direction = GET_NEXT_FLOAT(ARGS);
     float elevation = GET_NEXT_FLOAT(ARGS);
     RETURN->v_float = o(direction, elevation);
 }
 
-CK_DLL_MFUN(n_Coordinate)
+CK_DLL_MFUN(o_CoordinateCartesian)
+{
+    float x_ = GET_NEXT_FLOAT(ARGS);
+    float y_ = GET_NEXT_FLOAT(ARGS);
+    float z_ = GET_NEXT_FLOAT(ARGS);
+    RETURN->v_float = o(x_,y_,z_);
+}
+
+CK_DLL_MFUN(n_CoordinatePolar)
 {
     float direction = GET_NEXT_FLOAT(ARGS);
     float elevation = GET_NEXT_FLOAT(ARGS);
     RETURN->v_float = n(direction, elevation);
 }
 
-CK_DLL_MFUN(p_Coordinate)
+CK_DLL_MFUN(n_CoordinateCartesian)
+{
+    float x_ = GET_NEXT_FLOAT(ARGS);
+    float y_ = GET_NEXT_FLOAT(ARGS);
+    float z_ = GET_NEXT_FLOAT(ARGS);
+    RETURN->v_float = n(x_,y_,z_);
+}
+
+CK_DLL_MFUN(p_CoordinatePolar)
 {
     float direction = GET_NEXT_FLOAT(ARGS);
     float elevation = GET_NEXT_FLOAT(ARGS);
     RETURN->v_float = p(direction, elevation);
 }
 
-CK_DLL_MFUN(q_Coordinate)
+CK_DLL_MFUN(p_CoordinateCartesian)
+{
+    float x_ = GET_NEXT_FLOAT(ARGS);
+    float y_ = GET_NEXT_FLOAT(ARGS);
+    float z_ = GET_NEXT_FLOAT(ARGS);
+    RETURN->v_float = p(x_,y_,z_);
+}
+
+CK_DLL_MFUN(q_CoordinatePolar)
 {
     float direction = GET_NEXT_FLOAT(ARGS);
     float elevation = GET_NEXT_FLOAT(ARGS);
     RETURN->v_float = q(direction, elevation);
 }
 
-CK_DLL_MFUN(k_Coordinate)
+CK_DLL_MFUN(q_CoordinateCartesian)
+{
+    float x_ = GET_NEXT_FLOAT(ARGS);
+    float y_ = GET_NEXT_FLOAT(ARGS);
+    float z_ = GET_NEXT_FLOAT(ARGS);
+    RETURN->v_float = q(x_,y_,z_);
+}
+
+CK_DLL_MFUN(k_CoordinatePolar)
 {
     float direction = GET_NEXT_FLOAT(ARGS);
     float elevation = GET_NEXT_FLOAT(ARGS);
     RETURN->v_float = k(direction, elevation);
+}
+
+CK_DLL_MFUN(k_CoordinateCartesian)
+{
+    float x_ = GET_NEXT_FLOAT(ARGS);
+    float y_ = GET_NEXT_FLOAT(ARGS);
+    float z_ = GET_NEXT_FLOAT(ARGS);
+    RETURN->v_float = k(x_,y_,z_);
 }
 
 /*
