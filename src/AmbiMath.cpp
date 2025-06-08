@@ -508,45 +508,42 @@ CK_DLL_MFUN(all_CoordinatePolar)
     t_CKFLOAT elevation = GET_NEXT_FLOAT(ARGS);
     Chuck_ArrayFloat* coordinates = (Chuck_ArrayFloat*)GET_NEXT_OBJECT(ARGS);
     t_CKINT order = GET_NEXT_INT(ARGS);
-    am_obj->setDirection(direction);
-    am_obj->setElevation(elevation);
-    am_obj->setCoordinates(polarCoordinates);
     int size = (API->object->array_float_size(coordinates));
     int num_speakers = pow((order + 1), 2);
     if (size >= num_speakers)
     {
         all(direction, elevation, polarCoordinates, order);
-        if (order == 1 && size >= 4)
+        if (order == 1)
         {
-            for (int i = 0; i < size; i++)
+            for (int i = 0; i < num_speakers; i++)
             {
                 API->object->array_float_set_idx(coordinates, i, polarCoordinates[i]);
             }
         }
-        else if (order == 2 && size >= 9)
+        else if (order == 2)
         {
-            for (int i = 0; i < size; i++)
+            for (int i = 0; i < num_speakers; i++)
             {
                 API->object->array_float_set_idx(coordinates, i, polarCoordinates[i]);
             }
         }
-        else if (order == 3 && size >= 16)
+        else if (order == 3)
         {
-            for (int i = 0; i < size; i++)
+            for (int i = 0; i < num_speakers; i++)
             {
                 API->object->array_float_set_idx(coordinates, i, polarCoordinates[i]);
             }
         }
-        else if (order == 4 && size >= 25)
+        else if (order == 4)
         {
-            for (int i = 0; i < size; i++)
+            for (int i = 0; i < num_speakers; i++)
             {
                 API->object->array_float_set_idx(coordinates, i, polarCoordinates[i]);
             }
         }
-        else if (order == 5 && size >= 36)
+        else if (order == 5)
         {
-            for (int i = 0; i < size; i++)
+            for (int i = 0; i < num_speakers; i++)
             {
                 API->object->array_float_set_idx(coordinates, i, polarCoordinates[i]);
             }
@@ -564,46 +561,42 @@ CK_DLL_MFUN(all_CoordinateCartesian)
     t_CKFLOAT z_ = GET_NEXT_FLOAT(ARGS);
     Chuck_ArrayFloat* coordinates = (Chuck_ArrayFloat*)GET_NEXT_OBJECT(ARGS);
     t_CKINT order = GET_NEXT_INT(ARGS);
-    am_obj->setX(x_);
-    am_obj->setY(y_);
-    am_obj->setZ(z_);
-    am_obj->setCoordinates(cartCoordinates);
     int size = (API->object->array_float_size(coordinates));
     int num_speakers = pow((order + 1), 2);
     if (size >= num_speakers)
     {
         all(x_, y_, z_, cartCoordinates, order);
-        if (order == 1 && size >= 4)
+        if (order == 1)
         {
-            for (int i = 0; i < size; i++)
+            for (int i = 0; i < num_speakers; i++)
             {
                 API->object->array_float_set_idx(coordinates, i, cartCoordinates[i]);
             }
         }
-        else if (order == 2 && size >= 9)
+        else if (order == 2)
         {
-            for (int i = 0; i < size; i++)
+            for (int i = 0; i < num_speakers; i++)
             {
                 API->object->array_float_set_idx(coordinates, i, cartCoordinates[i]);
             }
         }
-        else if (order == 3 && size >= 16)
+        else if (order == 3)
         {
-            for (int i = 0; i < size; i++)
+            for (int i = 0; i < num_speakers; i++)
             {
                 API->object->array_float_set_idx(coordinates, i, cartCoordinates[i]);
             }
         }
-        else if (order == 4 && size >= 25)
+        else if (order == 4)
         {
-            for (int i = 0; i < size; i++)
+            for (int i = 0; i < num_speakers; i++)
             {
                 API->object->array_float_set_idx(coordinates, i, cartCoordinates[i]);
             }
         }
-        else if (order == 5 && size >= 36)
+        else if (order == 5)
         {
-            for (int i = 0; i < size; i++)
+            for (int i = 0; i < num_speakers; i++)
             {
                 API->object->array_float_set_idx(coordinates, i, cartCoordinates[i]);
             }
