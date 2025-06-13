@@ -472,3 +472,4 @@ CK_DLL_MFUN(HOA4_7);
 CK_DLL_MFUN(HOA4_8);
 CK_DLL_MFUN(all_CoordinatePolar);
 CK_DLL_MFUN(all_CoordinateCartesian);
+CK_DLL_MFUN(interpolation);

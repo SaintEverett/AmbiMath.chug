@@ -24,6 +24,7 @@
 #include <limits.h>
 #include <math.h>
 #include <stdlib.h>
+#include <thread>
 
 // declaration of chugin constructor
 CK_DLL_CTOR(ambimath_ctor);
@@ -421,6 +422,13 @@ CK_DLL_QUERY(AmbiMath)
     QUERY->add_arg(QUERY, "float[]", "coordinates");
     QUERY->add_arg(QUERY, "int", "order");
     QUERY->doc_func(QUERY, "Computes all coordinates of a given order and returns an array of the corresponding size. Order of coordinates is X,Y,Z,W,V,T,R,S,U,Q,O,M,K,L,N,O.");
+
+    // interpolation 
+    QUERY->add_mfun(QUERY, interpolation, "void", "interpolate");
+    QUERY->add_arg(QUERY, "float", "origin");
+    QUERY->add_arg(QUERY, "float", "target");
+    QUERY->add_arg(QUERY, "dur", "time");
+    QUERY->doc_func(QUERY, "takes an original value, target value, and time to hit that value.");
 
     // create and set w constant
     QUERY->add_svar(QUERY, "float", "w", TRUE, &w_constant);
@@ -827,6 +835,12 @@ CK_DLL_MFUN(k_CoordinateCartesian)
     float y_ = GET_NEXT_FLOAT(ARGS);
     float z_ = GET_NEXT_FLOAT(ARGS);
     RETURN->v_float = k(x_,y_,z_);
+}
+
+CK_DLL_MFUN(interpolation)
+{
+    
+    SET_NEXT_FLOAT(ARGS, 24.134);
 }
 
 /*
