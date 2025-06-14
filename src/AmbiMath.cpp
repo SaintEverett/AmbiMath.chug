@@ -19,11 +19,6 @@
 
 // general includes
 #include "AmbiMath.h"
-#include <float.h>
-#include <iostream>
-#include <limits.h>
-#include <math.h>
-#include <stdlib.h>
 
 // declaration of chugin constructor
 CK_DLL_CTOR(ambimath_ctor);
@@ -835,7 +830,6 @@ CK_DLL_MFUN(k_CoordinateCartesian)
     float z_ = GET_NEXT_FLOAT(ARGS);
     RETURN->v_float = k(x_,y_,z_);
 }
-
 /*
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 * Consider in developing the all coordinate function...
@@ -847,3 +841,32 @@ CK_DLL_MFUN(k_CoordinateCartesian)
 * You can also clear an array in this code section, perhaps it's best to clear the given array and then proceed with filling it.
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 */
+CK_DLL_MFUN(interpolation)
+{
+    Chuck_ArrayFloat* origin = (Chuck_ArrayFloat*)GET_NEXT_OBJECT(ARGS); // grab chuck array of origin values
+    Chuck_ArrayFloat* target = (Chuck_ArrayFloat*)GET_NEXT_OBJECT(ARGS); // grab chuck array of target values
+    double dur = GET_NEXT_DUR(ARGS); // grab time to get to target values
+    int originSize = (API->object->array_float_size(origin)); // find size of origin
+    int targetSize = (API->object->array_float_size(target)); // find size of target
+    if (originSize != targetSize) // if target and origin are different sizes, get out
+    {
+        RETURN->v_float = 0;
+    }
+    else if (originSize == targetSize) // if they are the same size, proceed
+    {
+        int threadCount = originSize; // how many threads do we need? (one for each value in chuck array)
+        std::vector<std::thread> threadVec; // create vector of threads (allows us to dynamically store them)
+        for (int i = 0; i < threadCount;i++) // create thread for each member in chuck array, assign each thread the value it begins at, and where it should arrive, as well as how long it should take to get there.
+        {
+            float threadOrigin = (API->object->array_float_get_idx(origin, i)); // grab start
+            threadVec.emplace_back(interp, API, threadOrigin, target, dur, i); // chuck thread
+        }
+        for (auto& thread : threadVec) // wait till all threads are finished to join them into main thread
+        {
+            if (thread.joinable()) // can we join ?
+            {
+                thread.join(); // yes
+            } // by waiting till threads are finished, we prevent this function from finishing before it's child threads are done
+        }
+    }
+}
