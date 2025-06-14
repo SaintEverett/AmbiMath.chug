@@ -425,10 +425,10 @@ CK_DLL_QUERY(AmbiMath)
 
     // interpolation 
     QUERY->add_mfun(QUERY, interpolation, "void", "interpolate");
-    QUERY->add_arg(QUERY, "float", "origin");
-    QUERY->add_arg(QUERY, "float", "target");
+    QUERY->add_arg(QUERY, "float[]", "origin");
+    QUERY->add_arg(QUERY, "float[]", "targets");
     QUERY->add_arg(QUERY, "dur", "time");
-    QUERY->doc_func(QUERY, "takes an original value, target value, and time to hit that value.");
+    QUERY->doc_func(QUERY, "takes an origin, target, and time to hit that value.");
 
     // create and set w constant
     QUERY->add_svar(QUERY, "float", "w", TRUE, &w_constant);
@@ -838,9 +838,16 @@ CK_DLL_MFUN(k_CoordinateCartesian)
 }
 
 CK_DLL_MFUN(interpolation)
-{
-    
-    SET_NEXT_FLOAT(ARGS, 24.134);
+{ 
+    Chuck_ArrayFloat* origin = (Chuck_ArrayFloat*)GET_NEXT_OBJECT(ARGS);
+    Chuck_ArrayFloat* target = (Chuck_ArrayFloat*)GET_NEXT_OBJECT(ARGS);
+    double dur = GET_NEXT_DUR(ARGS);
+    int originSize = (API->object->array_float_size(origin));
+    int targetSize = (API->object->array_float_size(target));
+    if (originSize != targetSize)
+    {
+        
+    }
 }
 
 /*
