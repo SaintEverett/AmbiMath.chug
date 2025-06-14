@@ -859,7 +859,7 @@ CK_DLL_MFUN(interpolation)
         for (int i = 0; i < threadCount;i++) // create thread for each member in chuck array, assign each thread the value it begins at, and where it should arrive, as well as how long it should take to get there.
         {
             float threadOrigin = (API->object->array_float_get_idx(origin, i)); // grab start
-            threadVec.emplace_back(interp, API, threadOrigin, target, dur, i); // chuck thread
+            threadVec.emplace_back(singleInterpolate, API, threadOrigin, target, dur, i); // chuck thread
         }
         for (auto& thread : threadVec) // wait till all threads are finished to join them into main thread
         {

@@ -444,7 +444,7 @@ void all(float x, float y, float z, double coordinates[], int order)
     }
 }
 
-void interp(CK_DL_API API, float origin, Chuck_ArrayFloat* targetArray, double time, int id)
+void singleInterpolate(CK_DL_API API, float origin, Chuck_ArrayFloat* targetArray, double time, int id)
 {
     float target = API->object->array_float_get_idx(targetArray, id);
     float temp = origin;
