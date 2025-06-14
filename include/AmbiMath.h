@@ -23,12 +23,30 @@
 // 
 //-----------------------------------------------------------------------------
 #include "chugin.h"
+#include <float.h>
+#include <stdlib.h>
+#include <math.h>
+#include <cmath>
+#include <iostream>
+#include <limits>
+#include <thread>
+#include <vector>
+#include <chrono>
+
 // query
 DLL_QUERY libmath_query(Chuck_DL_Query* QUERY);
 
 static int w_constant = 1;
 static double g_pi = CK_ONE_PI;
 
+void emc_WAIT(int time)
+{
+    do {
+        const auto start = std::chrono::high_resolution_clock::now();
+        std::this_thread::sleep_for(std::chrono::milliseconds(time));
+        const auto end = std::chrono::high_resolution_clock::now();
+    } while (0);
+}
 // convert degrees to radians
 double degreeRad(float degree)
 {
@@ -423,6 +441,19 @@ void all(float x, float y, float z, double coordinates[], int order)
         coordinates[33] = (0.522912516 * x * (2 * x_2 * y_2 + 8 * x_2 * z_2 - 24 * y_2 * z_2 * (x_2 * x_2) + 3 * (y_2 * y_2)));
         coordinates[34] = (2.218529919 * z * ((x_2 * x_2) - (6 * x_2 * y_2) + (y_2 * y_2)));
         coordinates[35] = (0.70156076 * x * ((x_2 * x_2) - 10 * x_2 * y_2 + 5 * (y_2 * y_2)));
+    }
+}
+
+void interp(CK_DL_API API, float origin, Chuck_ArrayFloat* targetArray, double time, int id)
+{
+    float target = API->object->array_float_get_idx(targetArray, id);
+    float temp = origin;
+    double slew = 0.05;
+    float delta = 0;
+    for (int i = 1; i < time; i++)
+    {
+        delta = (i / time);
+        temp = (origin + (delta * (target - origin)));
     }
 }
 
