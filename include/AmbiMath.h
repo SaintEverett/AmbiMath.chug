@@ -362,13 +362,13 @@ void all(float direction, float elevation, double coordinates[], int order)
         coordinates[1] = sin_a * cos_e;
         coordinates[2] = sin_e;
         coordinates[3] = cos_a * cos_e;
-        coordinates[4] = (0.8660254038 * (2 * cos_a * sin_a) * pow(cos_e, 2));
-        coordinates[5] = (0.8660254038 * sin_a * (2 * cos_e * sin_e));
+        coordinates[4] = (0.8660254038 * (sinf(2*direction_r)) * pow(cos_e, 2));
+        coordinates[5] = (0.8660254038 * sin_a * (sinf(2*elevation_r)));
         coordinates[6] = (0.5 * (3 * pow(sin_e, 2) - 1));
-        coordinates[7] = (0.8660254038 * (cos_a * (2 * cos_e * sin_e)));
+        coordinates[7] = (0.8660254038 * (cos_a * (sinf(2*elevation_r))));
         coordinates[8] = (0.8660254038 * cosf(2 * direction_r) * pow(cos_e, 2));
         coordinates[9] = (0.790569415 * sinf(3 * direction_r) * (cos_e * cos_e * cos_e));
-        coordinates[10] = (1.936491673 * (2 * cos_a * sin_a) * sin_e * pow(cos_e, 2));
+        coordinates[10] = (1.936491673 * (sinf(2 * direction_r)) * sin_e * pow(cos_e, 2));
         coordinates[11] = (0.6123724357 * sin_a * cos_e * (5 * pow(sin_e, 2) - 1));
         coordinates[12] = (0.5 * sin_e * (5 * pow(sin_e, 2) - 3));
         coordinates[13] = (0.6123724357 * cos_a * cos_e * (5 * pow(sin_e, 2) - 1));
