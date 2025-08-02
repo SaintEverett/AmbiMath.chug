@@ -400,6 +400,10 @@ void all(float direction, float elevation, double coordinates[], int order)
 void all(float x, float y, float z, double coordinates[], int order)
 {
     int size = (sizeof(coordinates) / sizeof(coordinates[0]));
+    float r = sqrt((x * x) + (y * y) + (z * z)); // this ensures we stay within our defined sphere, normalizing the coordinates.
+    x /= r; // later on, coordinates that are calculated before normalization can be used to derive distance
+    y /= r;
+    z /= r;
     float x_2 = x * x;
     float y_2 = y * y;
     float z_2 = z * z;
@@ -499,3 +503,4 @@ CK_DLL_MFUN(HOA4_7);
 CK_DLL_MFUN(HOA4_8);
 CK_DLL_MFUN(all_CoordinatePolar);
 CK_DLL_MFUN(all_CoordinateCartesian);
+CK_DLL_MFUN(interpolation);

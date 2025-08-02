@@ -2,11 +2,11 @@
 
 ## Supported Versions
 
-As of v0.0.1, AmbiMath is supported and fully functional. 
+As of v1.0.1, AmbiMath is supported and fully functional. 
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 0.0.1   | :white_check_mark: |
+| 1.0.1   | :white_check_mark: |
 
 ## Reporting a Vulnerability
 

@@ -11,7 +11,7 @@
 ## About the Project
 
 ### Features
-- Up to 3rd order SN3D ambisonic coordinate systems.
+- Up to 5th order SN3D ambisonic coordinate systems.
 - Individual or all coordinates calculable at any time.
 
 
@@ -25,7 +25,7 @@
 ## FAQ
 
 - How do I install this chugin?
-  - Simply drop the chugin in your "chugins" folder within your ChucK build.
+  - Simply drop the .chug file in your "chugins" folder within your ChucK build.
 
 - I don't have a "chugins" folder in my ChucK build, what do I do?
   - If you have not yet built your chugins library (should come with ChucK install as of 1.5.x.x), then you can find information on the build here... https://github.com/ccrma/chugins
