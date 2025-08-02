@@ -36,17 +36,6 @@ CK_DLL_TICK(ambimath_tick);
 t_CKINT ambimath_data_offset = 0;
 int mode = 0;
 
-struct storageCloset
-{
-    double coordinates[64];
-    float direction;
-    float elevation;
-    float radius;
-    double x;
-    double y;
-    double z;
-};
-
 /*
 // array of coordinate function pointers
 typedef double (*func_storage) ();
@@ -63,91 +52,10 @@ public:
     // constructor
     AmbiMath(t_CKFLOAT fs)
     {
-        m_param = 0;
+        ;
     }
-
-    // for chugins extending UGen
-    SAMPLE tick(SAMPLE in)
-    {
-        // default: this passes whatever input is patched into chugin
-        return in;
-    }
-
-    // set parameter example
-    t_CKFLOAT setParam(t_CKFLOAT p)
-    {
-        m_param = p;
-        return p;
-    }
-
-    void setDirection(float direction)
-    {
-        class_storage.direction = direction;
-    }
-    void setElevation(float elevation)
-    {
-        class_storage.elevation = elevation;
-    }
-    void setRadius(float radius)
-    {
-        class_storage.radius = radius;
-    }
-    void setCoordinates(double coordinates[])
-    {
-        for (int i = 0; i < 64; i++)
-        {
-            class_storage.coordinates[i] = coordinates[i];
-        }
-    }
-    void setX(double x)
-    {
-        class_storage.x = x;
-    }
-    void setY(double y)
-    {
-        class_storage.y = y;
-    }
-    void setZ(double z)
-    {
-        class_storage.z = z;
-    }
-
-    float getDirection()
-    {
-        return class_storage.direction;
-    }
-    float getElevation()
-    {
-        return class_storage.elevation;
-    }
-    float getRadius()
-    {
-        return class_storage.radius;
-    }
-    double getIndex(int i)
-    {
-        return class_storage.coordinates[i];
-    }
-    double getX()
-    {
-        return class_storage.x;
-    }
-    double getY()
-    {
-        return class_storage.y;
-    }
-    double getZ()
-    {
-        return class_storage.z;
-    }
-
-    // get parameter example
-    t_CKFLOAT getParam() { return m_param; }
 
 private:
-    // instance data
-    t_CKFLOAT m_param;
-    storageCloset class_storage;
 };
 
 
@@ -406,8 +314,15 @@ CK_DLL_QUERY(AmbiMath)
     QUERY->add_arg(QUERY, "float", "elevation");
     QUERY->add_arg(QUERY, "float[]", "coordinates");
     QUERY->add_arg(QUERY, "int", "order");
+    QUERY->doc_func(QUERY, "Computes all coordinates of a given order and fills an array of the corresponding size. Order of coordinates is X,Y,Z,W,V,T,R,S,U,Q,O,M,K,L,N,O.");
+    /*
+    // all coordinates return array
+    QUERY->add_mfun(QUERY, all_CoordinatePolarReturn, "float[]", "all");
+    QUERY->add_arg(QUERY, "float", "direction");
+    QUERY->add_arg(QUERY, "float", "elevation");
+    QUERY->add_arg(QUERY, "int", "order");
     QUERY->doc_func(QUERY, "Computes all coordinates of a given order and returns an array of the corresponding size. Order of coordinates is X,Y,Z,W,V,T,R,S,U,Q,O,M,K,L,N,O.");
-
+    */
     // all coordinates
     QUERY->add_mfun(QUERY, all_CoordinateCartesian, "void", "all");
     QUERY->add_arg(QUERY, "float", "x");
@@ -416,18 +331,19 @@ CK_DLL_QUERY(AmbiMath)
     QUERY->add_arg(QUERY, "float[]", "coordinates");
     QUERY->add_arg(QUERY, "int", "order");
     QUERY->doc_func(QUERY, "Computes all coordinates of a given order and returns an array of the corresponding size. Order of coordinates is X,Y,Z,W,V,T,R,S,U,Q,O,M,K,L,N,O.");
+    /*
+    // all coordinates return array
+    QUERY->add_mfun(QUERY, all_CoordinateCartesianReturn, "float[]", "all");
+    QUERY->add_arg(QUERY, "float", "x");
+    QUERY->add_arg(QUERY, "float", "y");
+    QUERY->add_arg(QUERY, "float", "z");
+    QUERY->add_arg(QUERY, "int", "order");
+    QUERY->doc_func(QUERY, "Computes all coordinates of a given order and returns an array of the corresponding size. Order of coordinates is X,Y,Z,W,V,T,R,S,U,Q,O,M,K,L,N,O.");
+    */
 
     // create and set w constant
     QUERY->add_svar(QUERY, "float", "w", TRUE, &w_constant);
     QUERY->doc_var(QUERY, "W constant used in SN3D Ambisonics");
-
-    // example of adding setter method
-    QUERY->add_mfun(QUERY, ambimath_setParam, "float", "param");
-    // example of adding argument to the above method
-    QUERY->add_arg(QUERY, "float", "arg");
-
-    // example of adding getter method
-    QUERY->add_mfun(QUERY, ambimath_getParam, "float", "param");
 
     // this reserves a variable in the ChucK internal class to store 
     // referene to the c++ class we defined above
@@ -469,31 +385,6 @@ CK_DLL_DTOR(ambimath_dtor)
     OBJ_MEMBER_INT(SELF, ambimath_data_offset) = 0;
 }
 
-// example implementation for setter
-CK_DLL_MFUN(ambimath_setParam)
-{
-    // get our c++ class pointer
-    AmbiMath* am_obj = (AmbiMath*)OBJ_MEMBER_INT(SELF, ambimath_data_offset);
-
-    // get next argument
-    // NOTE argument type must match what is specified above in CK_DLL_QUERY
-    // NOTE this advances the ARGS pointer, so save in variable for re-use
-    t_CKFLOAT arg1 = GET_NEXT_FLOAT(ARGS);
-
-    // call setParam() and set the return value
-    RETURN->v_float = am_obj->setParam(arg1);
-}
-
-// example implementation for getter
-CK_DLL_MFUN(ambimath_getParam)
-{
-    // get our c++ class pointer
-    AmbiMath* am_obj = (AmbiMath*)OBJ_MEMBER_INT(SELF, ambimath_data_offset);
-
-    // call getParam() and set the return value
-    RETURN->v_float = am_obj->getParam();
-}
-
 CK_DLL_MFUN(all_CoordinatePolar)
 {
     // get our c++ class pointer
@@ -503,9 +394,6 @@ CK_DLL_MFUN(all_CoordinatePolar)
     t_CKFLOAT elevation = GET_NEXT_FLOAT(ARGS);
     Chuck_ArrayFloat* coordinates = (Chuck_ArrayFloat*)GET_NEXT_OBJECT(ARGS);
     t_CKINT order = GET_NEXT_INT(ARGS);
-    am_obj->setDirection(direction);
-    am_obj->setElevation(elevation);
-    am_obj->setCoordinates(polarCoordinates);
     int size = (API->object->array_float_size(coordinates));
     int num_speakers = pow((order + 1), 2);
     if (size >= num_speakers)
@@ -559,10 +447,6 @@ CK_DLL_MFUN(all_CoordinateCartesian)
     t_CKFLOAT z_ = GET_NEXT_FLOAT(ARGS);
     Chuck_ArrayFloat* coordinates = (Chuck_ArrayFloat*)GET_NEXT_OBJECT(ARGS);
     t_CKINT order = GET_NEXT_INT(ARGS);
-    am_obj->setX(x_);
-    am_obj->setY(y_);
-    am_obj->setZ(z_);
-    am_obj->setCoordinates(cartCoordinates);
     int size = (API->object->array_float_size(coordinates));
     int num_speakers = pow((order + 1), 2);
     if (size >= num_speakers)
@@ -829,44 +713,4 @@ CK_DLL_MFUN(k_CoordinateCartesian)
     float y_ = GET_NEXT_FLOAT(ARGS);
     float z_ = GET_NEXT_FLOAT(ARGS);
     RETURN->v_float = k(x_,y_,z_);
-}
-/*
-* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-* Consider in developing the all coordinate function...
-* In the chugin.h file, line 2189, there is a block of code for determining the size of a float array inside ChucK.
-* There are also details on retrieving float array members with a given index.
-* As well as details on setting a float array member with a given index.
-* Perhaps the arguments can give the needed array name or pointer, and a for loop can replace each array member.
-* Make sure to check if the array size lines up with the amount of coordinates given the order.
-* You can also clear an array in this code section, perhaps it's best to clear the given array and then proceed with filling it.
-* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-*/
-CK_DLL_MFUN(interpolation)
-{
-    Chuck_ArrayFloat* origin = (Chuck_ArrayFloat*)GET_NEXT_OBJECT(ARGS); // grab chuck array of origin values
-    Chuck_ArrayFloat* target = (Chuck_ArrayFloat*)GET_NEXT_OBJECT(ARGS); // grab chuck array of target values
-    double dur = GET_NEXT_DUR(ARGS); // grab time to get to target values
-    int originSize = (API->object->array_float_size(origin)); // find size of origin
-    int targetSize = (API->object->array_float_size(target)); // find size of target
-    if (originSize != targetSize) // if target and origin are different sizes, get out
-    {
-        RETURN->v_float = 0;
-    }
-    else if (originSize == targetSize) // if they are the same size, proceed
-    {
-        int threadCount = originSize; // how many threads do we need? (one for each value in chuck array)
-        std::vector<std::thread> threadVec; // create vector of threads (allows us to dynamically store them)
-        for (int i = 0; i < threadCount;i++) // create thread for each member in chuck array, assign each thread the value it begins at, and where it should arrive, as well as how long it should take to get there.
-        {
-            float threadOrigin = (API->object->array_float_get_idx(origin, i)); // grab start
-            threadVec.emplace_back(singleInterpolate, API, threadOrigin, target, dur, i); // chuck thread
-        }
-        for (auto& thread : threadVec) // wait till all threads are finished to join them into main thread
-        {
-            if (thread.joinable()) // can we join ?
-            {
-                thread.join(); // yes
-            } // by waiting till threads are finished, we prevent this function from finishing before it's child threads are done
-        }
-    }
 }
