@@ -19,12 +19,6 @@
 
 // general includes
 #include "AmbiMath.h"
-#include <float.h>
-#include <iostream>
-#include <limits.h>
-#include <math.h>
-#include <stdlib.h>
-#include <thread>
 
 // declaration of chugin constructor
 CK_DLL_CTOR(ambimath_ctor);
@@ -42,17 +36,6 @@ CK_DLL_TICK(ambimath_tick);
 t_CKINT ambimath_data_offset = 0;
 int mode = 0;
 
-struct storageCloset
-{
-    double coordinates[64];
-    float direction;
-    float elevation;
-    float radius;
-    double x;
-    double y;
-    double z;
-};
-
 /*
 // array of coordinate function pointers
 typedef double (*func_storage) ();
@@ -69,91 +52,10 @@ public:
     // constructor
     AmbiMath(t_CKFLOAT fs)
     {
-        m_param = 0;
+        ;
     }
-
-    // for chugins extending UGen
-    SAMPLE tick(SAMPLE in)
-    {
-        // default: this passes whatever input is patched into chugin
-        return in;
-    }
-
-    // set parameter example
-    t_CKFLOAT setParam(t_CKFLOAT p)
-    {
-        m_param = p;
-        return p;
-    }
-
-    void setDirection(float direction)
-    {
-        class_storage.direction = direction;
-    }
-    void setElevation(float elevation)
-    {
-        class_storage.elevation = elevation;
-    }
-    void setRadius(float radius)
-    {
-        class_storage.radius = radius;
-    }
-    void setCoordinates(double coordinates[])
-    {
-        for (int i = 0; i < 64; i++)
-        {
-            class_storage.coordinates[i] = coordinates[i];
-        }
-    }
-    void setX(double x)
-    {
-        class_storage.x = x;
-    }
-    void setY(double y)
-    {
-        class_storage.y = y;
-    }
-    void setZ(double z)
-    {
-        class_storage.z = z;
-    }
-
-    float getDirection()
-    {
-        return class_storage.direction;
-    }
-    float getElevation()
-    {
-        return class_storage.elevation;
-    }
-    float getRadius()
-    {
-        return class_storage.radius;
-    }
-    double getIndex(int i)
-    {
-        return class_storage.coordinates[i];
-    }
-    double getX()
-    {
-        return class_storage.x;
-    }
-    double getY()
-    {
-        return class_storage.y;
-    }
-    double getZ()
-    {
-        return class_storage.z;
-    }
-
-    // get parameter example
-    t_CKFLOAT getParam() { return m_param; }
 
 private:
-    // instance data
-    t_CKFLOAT m_param;
-    storageCloset class_storage;
 };
 
 
@@ -412,8 +314,15 @@ CK_DLL_QUERY(AmbiMath)
     QUERY->add_arg(QUERY, "float", "elevation");
     QUERY->add_arg(QUERY, "float[]", "coordinates");
     QUERY->add_arg(QUERY, "int", "order");
+    QUERY->doc_func(QUERY, "Computes all coordinates of a given order and fills an array of the corresponding size. Order of coordinates is X,Y,Z,W,V,T,R,S,U,Q,O,M,K,L,N,O.");
+    /*
+    // all coordinates return array
+    QUERY->add_mfun(QUERY, all_CoordinatePolarReturn, "float[]", "all");
+    QUERY->add_arg(QUERY, "float", "direction");
+    QUERY->add_arg(QUERY, "float", "elevation");
+    QUERY->add_arg(QUERY, "int", "order");
     QUERY->doc_func(QUERY, "Computes all coordinates of a given order and returns an array of the corresponding size. Order of coordinates is X,Y,Z,W,V,T,R,S,U,Q,O,M,K,L,N,O.");
-
+    */
     // all coordinates
     QUERY->add_mfun(QUERY, all_CoordinateCartesian, "void", "all");
     QUERY->add_arg(QUERY, "float", "x");
@@ -422,25 +331,19 @@ CK_DLL_QUERY(AmbiMath)
     QUERY->add_arg(QUERY, "float[]", "coordinates");
     QUERY->add_arg(QUERY, "int", "order");
     QUERY->doc_func(QUERY, "Computes all coordinates of a given order and returns an array of the corresponding size. Order of coordinates is X,Y,Z,W,V,T,R,S,U,Q,O,M,K,L,N,O.");
-
-    // interpolation 
-    QUERY->add_mfun(QUERY, interpolation, "void", "interpolate");
-    QUERY->add_arg(QUERY, "float[]", "origin");
-    QUERY->add_arg(QUERY, "float[]", "targets");
-    QUERY->add_arg(QUERY, "dur", "time");
-    QUERY->doc_func(QUERY, "takes an origin, target, and time to hit that value.");
+    /*
+    // all coordinates return array
+    QUERY->add_mfun(QUERY, all_CoordinateCartesianReturn, "float[]", "all");
+    QUERY->add_arg(QUERY, "float", "x");
+    QUERY->add_arg(QUERY, "float", "y");
+    QUERY->add_arg(QUERY, "float", "z");
+    QUERY->add_arg(QUERY, "int", "order");
+    QUERY->doc_func(QUERY, "Computes all coordinates of a given order and returns an array of the corresponding size. Order of coordinates is X,Y,Z,W,V,T,R,S,U,Q,O,M,K,L,N,O.");
+    */
 
     // create and set w constant
     QUERY->add_svar(QUERY, "float", "w", TRUE, &w_constant);
     QUERY->doc_var(QUERY, "W constant used in SN3D Ambisonics");
-
-    // example of adding setter method
-    QUERY->add_mfun(QUERY, ambimath_setParam, "float", "param");
-    // example of adding argument to the above method
-    QUERY->add_arg(QUERY, "float", "arg");
-
-    // example of adding getter method
-    QUERY->add_mfun(QUERY, ambimath_getParam, "float", "param");
 
     // this reserves a variable in the ChucK internal class to store 
     // referene to the c++ class we defined above
@@ -482,31 +385,6 @@ CK_DLL_DTOR(ambimath_dtor)
     OBJ_MEMBER_INT(SELF, ambimath_data_offset) = 0;
 }
 
-// example implementation for setter
-CK_DLL_MFUN(ambimath_setParam)
-{
-    // get our c++ class pointer
-    AmbiMath* am_obj = (AmbiMath*)OBJ_MEMBER_INT(SELF, ambimath_data_offset);
-
-    // get next argument
-    // NOTE argument type must match what is specified above in CK_DLL_QUERY
-    // NOTE this advances the ARGS pointer, so save in variable for re-use
-    t_CKFLOAT arg1 = GET_NEXT_FLOAT(ARGS);
-
-    // call setParam() and set the return value
-    RETURN->v_float = am_obj->setParam(arg1);
-}
-
-// example implementation for getter
-CK_DLL_MFUN(ambimath_getParam)
-{
-    // get our c++ class pointer
-    AmbiMath* am_obj = (AmbiMath*)OBJ_MEMBER_INT(SELF, ambimath_data_offset);
-
-    // call getParam() and set the return value
-    RETURN->v_float = am_obj->getParam();
-}
-
 CK_DLL_MFUN(all_CoordinatePolar)
 {
     // get our c++ class pointer
@@ -521,37 +399,37 @@ CK_DLL_MFUN(all_CoordinatePolar)
     if (size >= num_speakers)
     {
         all(direction, elevation, polarCoordinates, order);
-        if (order == 1)
+        if (order == 1 && size >= 4)
         {
-            for (int i = 0; i < num_speakers; i++)
+            for (int i = 0; i < size; i++)
             {
                 API->object->array_float_set_idx(coordinates, i, polarCoordinates[i]);
             }
         }
-        else if (order == 2)
+        else if (order == 2 && size >= 9)
         {
-            for (int i = 0; i < num_speakers; i++)
+            for (int i = 0; i < size; i++)
             {
                 API->object->array_float_set_idx(coordinates, i, polarCoordinates[i]);
             }
         }
-        else if (order == 3)
+        else if (order == 3 && size >= 16)
         {
-            for (int i = 0; i < num_speakers; i++)
+            for (int i = 0; i < size; i++)
             {
                 API->object->array_float_set_idx(coordinates, i, polarCoordinates[i]);
             }
         }
-        else if (order == 4)
+        else if (order == 4 && size >= 25)
         {
-            for (int i = 0; i < num_speakers; i++)
+            for (int i = 0; i < size; i++)
             {
                 API->object->array_float_set_idx(coordinates, i, polarCoordinates[i]);
             }
         }
-        else if (order == 5)
+        else if (order == 5 && size >= 36)
         {
-            for (int i = 0; i < num_speakers; i++)
+            for (int i = 0; i < size; i++)
             {
                 API->object->array_float_set_idx(coordinates, i, polarCoordinates[i]);
             }
@@ -574,37 +452,37 @@ CK_DLL_MFUN(all_CoordinateCartesian)
     if (size >= num_speakers)
     {
         all(x_, y_, z_, cartCoordinates, order);
-        if (order == 1)
+        if (order == 1 && size >= 4)
         {
-            for (int i = 0; i < num_speakers; i++)
+            for (int i = 0; i < size; i++)
             {
                 API->object->array_float_set_idx(coordinates, i, cartCoordinates[i]);
             }
         }
-        else if (order == 2)
+        else if (order == 2 && size >= 9)
         {
-            for (int i = 0; i < num_speakers; i++)
+            for (int i = 0; i < size; i++)
             {
                 API->object->array_float_set_idx(coordinates, i, cartCoordinates[i]);
             }
         }
-        else if (order == 3)
+        else if (order == 3 && size >= 16)
         {
-            for (int i = 0; i < num_speakers; i++)
+            for (int i = 0; i < size; i++)
             {
                 API->object->array_float_set_idx(coordinates, i, cartCoordinates[i]);
             }
         }
-        else if (order == 4)
+        else if (order == 4 && size >= 25)
         {
-            for (int i = 0; i < num_speakers; i++)
+            for (int i = 0; i < size; i++)
             {
                 API->object->array_float_set_idx(coordinates, i, cartCoordinates[i]);
             }
         }
-        else if (order == 5)
+        else if (order == 5 && size >= 36)
         {
-            for (int i = 0; i < num_speakers; i++)
+            for (int i = 0; i < size; i++)
             {
                 API->object->array_float_set_idx(coordinates, i, cartCoordinates[i]);
             }
@@ -836,28 +714,3 @@ CK_DLL_MFUN(k_CoordinateCartesian)
     float z_ = GET_NEXT_FLOAT(ARGS);
     RETURN->v_float = k(x_,y_,z_);
 }
-
-CK_DLL_MFUN(interpolation)
-{ 
-    Chuck_ArrayFloat* origin = (Chuck_ArrayFloat*)GET_NEXT_OBJECT(ARGS);
-    Chuck_ArrayFloat* target = (Chuck_ArrayFloat*)GET_NEXT_OBJECT(ARGS);
-    double dur = GET_NEXT_DUR(ARGS);
-    int originSize = (API->object->array_float_size(origin));
-    int targetSize = (API->object->array_float_size(target));
-    if (originSize != targetSize)
-    {
-        
-    }
-}
-
-/*
-* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-* Consider in developing the all coordinate function...
-* In the chugin.h file, line 2189, there is a block of code for determining the size of a float array inside ChucK.
-* There are also details on retrieving float array members with a given index.
-* As well as details on setting a float array member with a given index.
-* Perhaps the arguments can give the needed array name or pointer, and a for loop can replace each array member.
-* Make sure to check if the array size lines up with the amount of coordinates given the order.
-* You can also clear an array in this code section, perhaps it's best to clear the given array and then proceed with filling it.
-* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-*/
