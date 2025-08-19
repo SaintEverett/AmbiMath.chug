@@ -314,7 +314,7 @@ CK_DLL_QUERY(AmbiMath)
     QUERY->add_arg(QUERY, "float", "elevation");
     QUERY->add_arg(QUERY, "float[]", "coordinates");
     QUERY->add_arg(QUERY, "int", "order");
-    QUERY->doc_func(QUERY, "Computes all coordinates of a given order and fills an array of the corresponding size. Order of coordinates is X,Y,Z,W,V,T,R,S,U,Q,O,M,K,L,N,O.");
+    QUERY->doc_func(QUERY, "Computes all coordinates of a given order and fills an array of the corresponding size. Order of coordinates is w,y,z,x,v,t,r,s,u,q,o,m,k,l,n,p,hoa4_0,hoa4_1,hoa4_2,hoa4_3,hoa4_4,hoa4_5,hoa4_6,hoa4_7,hoa4_8.");
     /*
     // all coordinates return array
     QUERY->add_mfun(QUERY, all_CoordinatePolarReturn, "float[]", "all");
@@ -330,7 +330,7 @@ CK_DLL_QUERY(AmbiMath)
     QUERY->add_arg(QUERY, "float", "z");
     QUERY->add_arg(QUERY, "float[]", "coordinates");
     QUERY->add_arg(QUERY, "int", "order");
-    QUERY->doc_func(QUERY, "Computes all coordinates of a given order and returns an array of the corresponding size. Order of coordinates is X,Y,Z,W,V,T,R,S,U,Q,O,M,K,L,N,O.");
+    QUERY->doc_func(QUERY, "Computes all coordinates of a given order and returns an array of the corresponding size. Order of coordinates is w,y,z,x,v,t,r,s,u,q,o,m,k,l,n,p,hoa4_0,hoa4_1,hoa4_2,hoa4_3,hoa4_4,hoa4_5,hoa4_6,hoa4_7,hoa4_8.");
     /*
     // all coordinates return array
     QUERY->add_mfun(QUERY, all_CoordinateCartesianReturn, "float[]", "all");
