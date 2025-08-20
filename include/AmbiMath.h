@@ -26,12 +26,9 @@
 #include <float.h>
 #include <stdlib.h>
 #include <math.h>
-#include <cmath>
 #include <iostream>
 #include <limits>
-#include <thread>
 #include <vector>
-#include <chrono>
 
 // query
 DLL_QUERY libmath_query(Chuck_DL_Query* QUERY);
@@ -39,14 +36,12 @@ DLL_QUERY libmath_query(Chuck_DL_Query* QUERY);
 static int w_constant = 1;
 static double g_pi = CK_ONE_PI;
 
-void emc_WAIT(int time)
+bool cartesian_test(float x, float y, float z)
 {
-    do {
-        const auto start = std::chrono::high_resolution_clock::now();
-        std::this_thread::sleep_for(std::chrono::milliseconds(time));
-        const auto end = std::chrono::high_resolution_clock::now();
-    } while (0);
+    if (pow(x, 2) + pow(y, 2) + pow(z, 2) >= 0.98 || pow(x, 2) + pow(y, 2) + pow(z, 2) == 1.0) return TRUE;
+    else return FALSE;
 }
+
 // convert degrees to radians
 double degreeRad(float degree)
 {
