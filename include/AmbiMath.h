@@ -38,7 +38,7 @@ static double g_pi = CK_ONE_PI;
 
 bool cartesian_test(float x, float y, float z)
 {
-    if (pow(x, 2) + pow(y, 2) + pow(z, 2) >= 0.97 && pow(x, 2) + pow(y, 2) + pow(z, 2) <= 1.0) return TRUE;
+    if (pow(x, 2) + pow(y, 2) + pow(z, 2) <= 1.0005 && pow(x, 2) + pow(y, 2) + pow(z, 2) >= 0.98) return TRUE;
     else return FALSE;
 }
 
