@@ -19,6 +19,8 @@
 
 // general includes
 #include "AmbiMath.h"
+#include "SHGen.h"
+#include <vector>
 
 // declaration of chugin constructor
 CK_DLL_CTOR(ambimath_ctor);
@@ -46,13 +48,12 @@ CK_DLL_TICK(ambimath_tick);
 // this is a special offset reserved for chugin internal data
 t_CKINT ambimath_data_offset = 0;
 int mode = 0;
-double coordinates[64];
+float* m_SH = nullptr; // null ptr reserved for storing results
+float cart[3] = { 0 }; // pointer to store cartesian coordinates in
 
-/*
-// array of coordinate function pointers
-typedef double (*func_storage) ();
-func_storage funcs[] = {w,y,z,x,v,t,r,s,u,q,o,m,k,l,n,p,hoa4_0,hoa4_1,hoa4_2,hoa4_3,hoa4_4,hoa4_5,hoa4_6,hoa4_7,hoa4_8}; // in spherical order
-*/
+// array of SH function pointers
+void (*SH[])(const float fX, const float fY, const float fZ, float* pSH) = { SHEval0, SHEval1, SHEval2, SHEval3, SHEval4, SHEval5, SHEval6, SHEval7, SHEval8 }; 
+
 
 //-----------------------------------------------------------------------------
 // class definition for internal chugin data
@@ -231,15 +232,17 @@ CK_DLL_MFUN(all_CoordinatePolar)
     t_CKFLOAT elevation = GET_NEXT_FLOAT(ARGS);
     t_CKINT order = GET_NEXT_INT(ARGS);
     int degree = pow((order + 1), 2);
-    all(direction, elevation, coordinates, order);
+    m_SH = new float[degree];
+    polarCartesian(direction, elevation, cart);
+    SH[order](cart[0], cart[1], cart[2], m_SH);
     // Create a float[] array
     Chuck_DL_Api::Object returnarray = API->object->create(SHRED, API->type->lookup(VM, "float[]"), false);
     Chuck_ArrayFloat * coordinatearray = (Chuck_ArrayFloat *) returnarray;
     for(int i = 0; i < degree; i++)
     {
-        API->object->array_float_push_back(coordinatearray, coordinates[i]);
+        API->object->array_float_push_back(coordinatearray, m_SH[i]);
     }  
-
+    delete[] m_SH;
     // Need to cast back to object due to lost inheirtience structure
     RETURN->v_object = (Chuck_Object*) coordinatearray;
 }
@@ -259,15 +262,16 @@ CK_DLL_MFUN(all_CoordinateCartesian)
         return;
     }
     int degree = pow((order + 1), 2);
-    all(x_, y_, z_, coordinates, order);
+    m_SH = new float[degree];
+    SH[order](cart[0], cart[1], cart[2], m_SH);
     // Create a float[] array
     Chuck_DL_Api::Object returnarray = API->object->create(SHRED, API->type->lookup(VM, "float[]"), false);
     Chuck_ArrayFloat* coordinatearray = (Chuck_ArrayFloat*)returnarray;
     for (int i = 0; i < degree; i++)
     {
-        API->object->array_float_push_back(coordinatearray, coordinates[i]);
+        API->object->array_float_push_back(coordinatearray, m_SH[i]);
     }
-
+    delete[] m_SH;
     // Need to cast back to object due to lost inheirtience structure
     RETURN->v_object = (Chuck_Object*)coordinatearray;
 }

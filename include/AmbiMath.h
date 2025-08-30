@@ -42,6 +42,13 @@ bool cartesian_test(float x, float y, float z)
     else return FALSE;
 }
 
+void polarCartesian(float direction, float elevation, float cartesian[3])
+{
+    cartesian[0] = (std::cosf(direction)*std::sinf(elevation));
+    cartesian[1] = (std::sinf(direction) * std::sinf(elevation));
+    cartesian[2] = (std::cosf(elevation));
+}
+
 // convert degrees to radians
 double degreeRad(float degree)
 {

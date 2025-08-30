@@ -1,17 +1,12 @@
 AmbiMath test;
-
-float polarcoordinates[36];
-float cartcoordinates[36];
+Math.sqrt(4*pi) => float sqrt4PI;
 float check[36];
-5 => int order;
+1 => int order;
 
-test.all(45,30,polarcoordinates,order);
-test.all(0.61237,0.61237,0.5,cartcoordinates,order);
+test.all(90, 1 ,order) @=> float polarcoordinates[];
+test.all(1.0,0.0,0.0,order) @=> float cartcoordinates[];
 
 for(int i; i < Math.pow((order+1),2); i++)
 {
-    cherr <= "Index: " <= i <= " Polar: " <= polarcoordinates[i] <= " | " <= "Cartesian: " <= cartcoordinates[i] <= IO.newline();
+    cherr <= "Index: " <= i <= " Polar: " <= polarcoordinates[i]*sqrt4PI <= " | " <= "Cartesian: " <= cartcoordinates[i]*sqrt4PI <= IO.newline();
 }
-
-polarcoordinates.zero();
-cartcoordinates.zero();

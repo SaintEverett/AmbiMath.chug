@@ -39,6 +39,7 @@
   <ItemGroup>
     <ClInclude Include="include\AmbiMath.h" />
     <ClInclude Include="include\chugin.h" />
+    <ClInclude Include="include\SHGen.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{32B00A7B-FFF6-2ABC-55E4-9C8F61E1BCEC}</ProjectGuid>
@@ -74,22 +75,22 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <TargetExt>.chug</TargetExt>
-    <IncludePath>chuck/include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\carpe\Documents\git\AmbiMath.chug\include;$(IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <TargetExt>.chug</TargetExt>
-    <IncludePath>chuck/include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\carpe\Documents\git\AmbiMath.chug\include;$(IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <TargetExt>.chug</TargetExt>
-    <IncludePath>chuck/include;$(IncludePath);C:\Users\carpe\Documents\build_chugins_here\AmbiMath.chug\include;C:\Users\carpe\Documents\GitHub\AmbiMath.chug</IncludePath>
+    <IncludePath>C:\Users\carpe\Documents\git\AmbiMath.chug\include;$(IncludePath);C:\Users\carpe\Documents\build_chugins_here\AmbiMath.chug\include;C:\Users\carpe\Documents\GitHub\AmbiMath.chug</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <TargetExt>.chug</TargetExt>
-    <IncludePath>chuck/include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\carpe\Documents\git\AmbiMath.chug\include;$(IncludePath);</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
