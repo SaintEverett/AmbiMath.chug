@@ -46,7 +46,7 @@ CK_DLL_TICK(ambimath_tick);
 // this is a special offset reserved for chugin internal data
 t_CKINT ambimath_data_offset = 0;
 int mode = 0;
-double coordinates[64];
+float* m_coord = nullptr;
 
 /*
 // array of coordinate function pointers
@@ -69,7 +69,6 @@ public:
 
 private:
 };
-
 
 //-----------------------------------------------------------------------------
 // info function: ChucK calls this when loading/probing the chugin
@@ -122,7 +121,7 @@ CK_DLL_QUERY(AmbiMath)
     // QUERY->add_ugen_func( QUERY, ambimath_tick, NULL, 1, 1 );
     // NOTE: if this is to be a UGen with more than 1 channel,
     // e.g., a multichannel UGen -- will need to use add_ugen_funcf()
-    // and declare a tickf function usinfg CK_DLL_TICKF  
+    // and declare a tickf function usinfg CK_DLL_TICKF
     // function definition
 
     // x coordinate(polar)
@@ -183,7 +182,7 @@ CK_DLL_QUERY(AmbiMath)
     QUERY->add_svar(QUERY, "float", "w", TRUE, &w_constant);
     QUERY->doc_var(QUERY, "W constant used in SN3D Ambisonics");
 
-    // this reserves a variable in the ChucK internal class to store 
+    // this reserves a variable in the ChucK internal class to store
     // referene to the c++ class we defined above
     ambimath_data_offset = QUERY->add_mvar(QUERY, "int", "@am_data", false);
 
@@ -197,7 +196,6 @@ CK_DLL_QUERY(AmbiMath)
     return TRUE;
 }
 
-
 // implementation for the default constructor
 CK_DLL_CTOR(ambimath_ctor)
 {
@@ -205,18 +203,17 @@ CK_DLL_CTOR(ambimath_ctor)
     OBJ_MEMBER_INT(SELF, ambimath_data_offset) = 0;
 
     // instantiate our internal c++ class representation
-    AmbiMath* am_obj = new AmbiMath(API->vm->srate(VM));
+    AmbiMath *am_obj = new AmbiMath(API->vm->srate(VM));
 
     // store the pointer in the ChucK object member
     OBJ_MEMBER_INT(SELF, ambimath_data_offset) = (t_CKINT)am_obj;
 }
 
-
 // implementation for the destructor
 CK_DLL_DTOR(ambimath_dtor)
 {
     // get our c++ class pointer
-    AmbiMath* am_obj = (AmbiMath*)OBJ_MEMBER_INT(SELF, ambimath_data_offset);
+    AmbiMath *am_obj = (AmbiMath *)OBJ_MEMBER_INT(SELF, ambimath_data_offset);
     // clean up (this macro tests for NULL, deletes, and zeros out the variable)
     CK_SAFE_DELETE(am_obj);
     // set the data field to 0
@@ -226,28 +223,30 @@ CK_DLL_DTOR(ambimath_dtor)
 CK_DLL_MFUN(all_CoordinatePolar)
 {
     // get our c++ class pointer
-    AmbiMath* am_obj = (AmbiMath*)OBJ_MEMBER_INT(SELF, ambimath_data_offset);
+    AmbiMath *am_obj = (AmbiMath *)OBJ_MEMBER_INT(SELF, ambimath_data_offset);
     t_CKFLOAT direction = GET_NEXT_FLOAT(ARGS);
     t_CKFLOAT elevation = GET_NEXT_FLOAT(ARGS);
     t_CKINT order = GET_NEXT_INT(ARGS);
     int degree = pow((order + 1), 2);
-    all(direction, elevation, coordinates, order);
+    m_coord = new float[degree];
+    all(direction, elevation, m_coord, order);
     // Create a float[] array
     Chuck_DL_Api::Object returnarray = API->object->create(SHRED, API->type->lookup(VM, "float[]"), false);
-    Chuck_ArrayFloat * coordinatearray = (Chuck_ArrayFloat *) returnarray;
-    for(int i = 0; i < degree; i++)
+    Chuck_ArrayFloat *coordinatearray = (Chuck_ArrayFloat *)returnarray;
+    for (int i = 0; i < degree; i++)
     {
-        API->object->array_float_push_back(coordinatearray, coordinates[i]);
-    }  
-
+        API->object->array_float_push_back(coordinatearray, m_coord[i]);
+    }
+    
     // Need to cast back to object due to lost inheirtience structure
-    RETURN->v_object = (Chuck_Object*) coordinatearray;
+    RETURN->v_object = (Chuck_Object *)coordinatearray;
+    delete[] m_coord;
 }
 
 CK_DLL_MFUN(all_CoordinateCartesian)
 {
     // get our c++ class pointer
-    AmbiMath* am_obj = (AmbiMath*)OBJ_MEMBER_INT(SELF, ambimath_data_offset);
+    AmbiMath *am_obj = (AmbiMath *)OBJ_MEMBER_INT(SELF, ambimath_data_offset);
     t_CKFLOAT x_ = GET_NEXT_FLOAT(ARGS);
     t_CKFLOAT y_ = GET_NEXT_FLOAT(ARGS);
     t_CKFLOAT z_ = GET_NEXT_FLOAT(ARGS);
@@ -259,24 +258,26 @@ CK_DLL_MFUN(all_CoordinateCartesian)
         return;
     }
     int degree = pow((order + 1), 2);
-    all(x_, y_, z_, coordinates, order);
+    m_coord = new float[degree];
+    all(x_, y_, z_, m_coord, order);
     // Create a float[] array
     Chuck_DL_Api::Object returnarray = API->object->create(SHRED, API->type->lookup(VM, "float[]"), false);
-    Chuck_ArrayFloat* coordinatearray = (Chuck_ArrayFloat*)returnarray;
+    Chuck_ArrayFloat *coordinatearray = (Chuck_ArrayFloat *)returnarray;
     for (int i = 0; i < degree; i++)
     {
-        API->object->array_float_push_back(coordinatearray, coordinates[i]);
+        API->object->array_float_push_back(coordinatearray, m_coord[i]);
     }
-
+    
     // Need to cast back to object due to lost inheirtience structure
-    RETURN->v_object = (Chuck_Object*)coordinatearray;
+    RETURN->v_object = (Chuck_Object *)coordinatearray;
+    delete[] m_coord;
 }
 
 CK_DLL_MFUN(x_CoordinatePolar)
 {
     float direction = GET_NEXT_FLOAT(ARGS);
     float elevation = GET_NEXT_FLOAT(ARGS);
-    RETURN->v_float = x(direction,elevation);
+    RETURN->v_float = x(direction, elevation);
 }
 
 CK_DLL_MFUN(x_CoordinateCartesian)
@@ -290,7 +291,7 @@ CK_DLL_MFUN(x_CoordinateCartesian)
         RETURN->v_int = false;
         return;
     }
-    RETURN->v_float = x(x_,y_,z_);
+    RETURN->v_float = x(x_, y_, z_);
 }
 
 CK_DLL_MFUN(y_CoordinatePolar)
@@ -311,7 +312,7 @@ CK_DLL_MFUN(y_CoordinateCartesian)
         RETURN->v_int = false;
         return;
     }
-    RETURN->v_float = y(x_,y_,z_);
+    RETURN->v_float = y(x_, y_, z_);
 }
 
 CK_DLL_MFUN(z_CoordinatePolar)
@@ -332,5 +333,5 @@ CK_DLL_MFUN(z_CoordinateCartesian)
         RETURN->v_int = false;
         return;
     }
-    RETURN->v_float = z(x_,y_,z_);
+    RETURN->v_float = z(x_, y_, z_);
 }
