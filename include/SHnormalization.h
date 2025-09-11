@@ -10,8 +10,7 @@ int factorial(int n)
 
 float* norm(unsigned order)
 {
-    float* result;
-    result = new float[(order * 2) + 1]; // reserve space for result [-order, ...0, ... order]
+    float* result[(order * 2) + 1];
     for (int i = (-1 * order); i <= order; i++) // calc each one
     {
         float l_frac = (((2 * order) + 1) / (4.f * R_PI));
