@@ -1,1 +1,0 @@
-// raw SH calculations
