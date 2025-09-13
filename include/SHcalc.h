@@ -1,5 +1,6 @@
 // SH normalization
 #include <cmath>
+#include <vector>
 #define R_PI 3.1415926535897932
 
 // lookup tables of normalization terms as -n <= m <= n including m = 0
@@ -22,8 +23,10 @@ float norm(const unsigned order, const int degree)
     return  sqrtf(l_frac / r_frac);;
 }
 
-float SH(const int degree, const unsigned order, float azimuth, float zenith)
+float SH(const int degree, const unsigned order, float azimuth_, float zenith_)
 {
+    float azimuth = azimuth_ * R_PI / 180;
+    float zenith = zenith_ * R_PI / 180;
     switch (order)
     {
     case 0 :
@@ -50,9 +53,10 @@ float SH(const int degree, const unsigned order, float azimuth, float zenith)
     return 0;
 }
 
-float* SH(const unsigned order, float azimuth, float zenith) // - n <= m <= n including m = 0
+std::vector<float> SH(const unsigned order, float azimuth, float zenith) // - n <= m <= n including m = 0
 {
-    float* result = new float[(2 * order) + 1];
+    std::vector<float> result;
+    result.reserve((2 * order) + 1);
     switch (order)
     {
     case 0:
@@ -60,37 +64,36 @@ float* SH(const unsigned order, float azimuth, float zenith) // - n <= m <= n in
         return result;
     case 1:
 
-        for (int degree = 0; degree <= (-1 * order); degree++)
+        for (int degree = -order; degree <= (int)order; degree++)
         {
-            if (degree >= 0) result[degree] = order_first[degree + order] * std::assoc_legendref(abs(degree), order, sinf(zenith)) * cosf(degree * azimuth);
-            else if (degree < 0) result[degree] = order_first[degree + order] * std::assoc_legendref(abs(degree), order, sinf(zenith)) * sinf(abs(degree) * azimuth);
+            if (degree >= 0) result[degree + order] = order_first[degree + order] * std::assoc_legendref(abs(degree), order, cosf(zenith)) * cosf(degree * azimuth);
+            else if (degree < 0) result[degree + order] = order_first[degree + order] * std::assoc_legendref(abs(degree), order, sinf(zenith)) * sinf(abs(degree) * azimuth);
         }
         break;
-    
+
     case 2:
-        for (int degree = 0; degree <= (-1 * order); degree++)
+        for (int degree = -order; degree <= (int)order; degree++)
         {
-            if (degree >= 0) result[degree] = order_second[degree + order] * std::assoc_legendref(abs(degree), order, cosf(zenith)) * cosf(degree * azimuth);
-            else if (degree < 0) result[degree] = order_second[degree + order] * std::assoc_legendref(abs(degree), order, cosf(zenith)) * sinf(abs(degree) * azimuth);
+            if (degree >= 0) result[degree + order] = order_second[degree + order] * std::assoc_legendref(abs(degree), order, cosf(zenith)) * cosf(degree * azimuth);
+            else if (degree < 0) result[degree + order] = order_second[degree + order] * std::assoc_legendref(abs(degree), order, cosf(zenith)) * sinf(abs(degree) * azimuth);
         }
-            break;
+        break;
     case 3:
-        for (int degree = 0; degree <= (-1 * order); degree++)
+        for (int degree = -order; degree <= (int)order; degree++)
         {
-            if (degree >= 0) result[degree] = order_third[degree + order] * std::assoc_legendref(abs(degree), order, cosf(zenith)) * cosf(degree * azimuth);
-            else if (degree < 0) result[degree] = order_third[degree + order] * std::assoc_legendref(abs(degree), order, cosf(zenith)) * sinf(abs(degree) * azimuth);
+            if (degree >= 0) result[degree + order] = order_third[degree + order] * std::assoc_legendref(abs(degree), order, cosf(zenith)) * cosf(degree * azimuth);
+            else if (degree < 0) result[degree + order] = order_third[degree + order] * std::assoc_legendref(abs(degree), order, cosf(zenith)) * sinf(abs(degree) * azimuth);
         }
         break;
     case 4:
-        for (int degree = 0; degree <= (-1 * order); degree++)
+        for (int degree = -order; degree <= (int)order; degree++)
         {
-            if (degree >= 0) result[degree] = order_fourth[degree + order] * std::assoc_legendref(abs(degree), order, cosf(zenith)) * cosf(degree * azimuth);
-            else if (degree < 0) result[degree] = order_fourth[degree + order] * std::assoc_legendref(abs(degree), order, cosf(zenith)) * sinf(abs(degree) * azimuth);
+            if (degree >= 0) result[degree + order] = order_fourth[degree + order] * std::assoc_legendref(abs(degree), order, cosf(zenith)) * cosf(degree * azimuth);
+            else if (degree < 0) result[degree + order] = order_fourth[degree + order] * std::assoc_legendref(abs(degree), order, cosf(zenith)) * sinf(abs(degree) * azimuth);
         }
         break;
     default:
         break;
     }
-    return 0;
+    return result;
 }
-
