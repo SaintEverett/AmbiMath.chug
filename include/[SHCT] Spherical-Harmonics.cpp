@@ -15,6 +15,7 @@
 #include <cmath>
 #include <vector>
 #include <array>
+#include "SHCT.h"
 
 #define pi 3.14159265358979323846264
 #define fourpi 12.566370614359172953850
@@ -24,43 +25,18 @@
 static const float degree2rad = pi / 180.0f;
 static const float rad2deg = 180.0f / pi;
 
-// constexpr function to generate factorial table at compile time
-constexpr auto create_factorial_lut()
-{
-    std::array<unsigned long long, MAX_SIZE> lut{}; // create look up table of huge values (unsigned long long)
-    lut[0] = 1;                                     // 0! = 1
-    for (size_t i = 1; i < MAX_SIZE; i++)
-    {
-        lut[i] = lut[i - 1] * i; // clever way of calculating without having to do 1*2*3*4....*n
-    }
-    return lut;
-}
-
-constexpr auto FACTORIAL_LOOKUP = create_factorial_lut(); // actually make the lookup table
-
-unsigned long long factorial(size_t n) // access this lookup table
-{
-    if (n > MAX_SIZE)
-    {
-        return 0;
-        std::cout << "ERROR: FACTORIAL INDEX NOT AVAILABLE \n";
-    }
-    else
-        return FACTORIAL_LOOKUP[n]; // since lut[0] = 0!, lut[1] = 1!, lut[2] = 2!, your n and index are interchangable
-}
+NLOUP<MAX_ORDER> norms;
 
 float SN3D(unsigned order, int degree) // SN3D normalization, returns [-1,1] normalized values
 {
     int d = (degree == 0) ? 1 : 0;                                                                     // Kronecker delta
-    float ratio = static_cast<float>(factorial(order - abs(degree))) / factorial(order + abs(degree)); // ratio of factorials
-    return sqrtf((2.f - d) * ratio);                                                                   // final result, 1/4pi omitted
+    return sqrtf((2.f - d) * norms.SN3D(order, degree));                                                                   // final result, 1/4pi omitted
 }
 
 float N3D(unsigned order, int degree) // N3D normalization
 {
     int d = (degree == 0) ? 1 : 0;                                                                     // Kronecker delta
-    float ratio = static_cast<float>(factorial(order - abs(degree))) / factorial(order + abs(degree)); // ratio of factorials
-    return sqrtf((2 * order) + 1) * sqrtf((2.f - d) * ratio);                                          // final result, N3D factor included
+    return sqrtf((2.f - d) * norms.N3D(order,degree));                                          // final result, N3D factor included
 }
 
 std::vector<float> SH(unsigned order_, const float azimuth_, const float zenith_, bool n3d)
