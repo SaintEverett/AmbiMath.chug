@@ -34,13 +34,11 @@
     <None Include="SECURITY.md" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="include\Spherical-Harmonics.cpp" />
     <ClCompile Include="src\AmbiMath.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AmbiMath.h" />
     <ClInclude Include="include\chugin.h" />
-    <ClInclude Include="include\SHcalc.h" />
     <ClInclude Include="include\SHCT.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

@@ -45,9 +45,9 @@ CK_DLL_TICK(ambimath_tick);
 
 // this is a special offset reserved for chugin internal data
 t_CKINT ambimath_data_offset = 0;
-int mode = 0;
-float* m_coord = nullptr;
 
+std::vector<float> coord;
+float *m_coord = nullptr;
 /*
 // array of coordinate function pointers
 typedef double (*func_storage) ();
@@ -78,15 +78,15 @@ private:
 CK_DLL_INFO(AmbiMath)
 {
     // the version string of this chugin, e.g., "v1.2.1"
-    QUERY->setinfo(QUERY, CHUGIN_INFO_CHUGIN_VERSION, "v0.0.1 - 'Lanquidity'");
+    QUERY->setinfo(QUERY, CHUGIN_INFO_CHUGIN_VERSION, "v1.0.0 - 'Innocent Passion'");
     // the author(s) of this chugin, e.g., "Alice Baker & Carl Donut"
     QUERY->setinfo(QUERY, CHUGIN_INFO_AUTHORS, "Everett M. Carpenter");
     // text description of this chugin; what is it? what does it do? who is it for?
-    QUERY->setinfo(QUERY, CHUGIN_INFO_DESCRIPTION, "AmbiMath calculates cartesian coordinates given an elevation angle and directional angle. As of v0.0.1 'Landquidity', coordinates up to the third order are available.");
+    QUERY->setinfo(QUERY, CHUGIN_INFO_DESCRIPTION, "AmbiMath calculates cartesian coordinates given an elevation angle and directional angle.");
     // (optional) URL of the homepage for this chugin
     QUERY->setinfo(QUERY, CHUGIN_INFO_URL, "");
     // (optional) contact email
-    QUERY->setinfo(QUERY, CHUGIN_INFO_EMAIL, "");
+    QUERY->setinfo(QUERY, CHUGIN_INFO_EMAIL, "carpee2@rpi.edu");
 }
 
 //-----------------------------------------------------------------------------
@@ -227,20 +227,23 @@ CK_DLL_MFUN(all_CoordinatePolar)
     t_CKFLOAT direction = GET_NEXT_FLOAT(ARGS);
     t_CKFLOAT elevation = GET_NEXT_FLOAT(ARGS);
     t_CKINT order = GET_NEXT_INT(ARGS);
-    int degree = pow((order + 1), 2);
-    m_coord = new float[degree];
-    all(direction, elevation, m_coord, order);
+    if (order > 12)
+    {
+        API->vm->throw_exception("Invalid Order", "Sorry, only up to the 12th order supported currently. If you have 169 speakers, email the dev...", nullptr);
+        RETURN->v_int = false;
+        return;
+    }
+    unsigned size = (order + 1) * (order + 1);
+    coord = SH(order, direction, elevation, 0);
     // Create a float[] array
     Chuck_DL_Api::Object returnarray = API->object->create(SHRED, API->type->lookup(VM, "float[]"), false);
     Chuck_ArrayFloat *coordinatearray = (Chuck_ArrayFloat *)returnarray;
-    for (int i = 0; i < degree; i++)
+    for (int i = 0; i < size; i++)
     {
-        API->object->array_float_push_back(coordinatearray, m_coord[i]);
+        API->object->array_float_push_back(coordinatearray, coord[i]);
     }
-    
     // Need to cast back to object due to lost inheirtience structure
     RETURN->v_object = (Chuck_Object *)coordinatearray;
-    delete[] m_coord;
 }
 
 CK_DLL_MFUN(all_CoordinateCartesian)
@@ -267,7 +270,7 @@ CK_DLL_MFUN(all_CoordinateCartesian)
     {
         API->object->array_float_push_back(coordinatearray, m_coord[i]);
     }
-    
+
     // Need to cast back to object due to lost inheirtience structure
     RETURN->v_object = (Chuck_Object *)coordinatearray;
     delete[] m_coord;
