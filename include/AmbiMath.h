@@ -19,7 +19,6 @@
 //        {
 //           AmbiDeco.chan(i) => dac.chan(i);
 //        }
-// 3. Index 34 is not aligned. I believe the polar equation is accurate, but something is wrong with the cartesian formulation.
 //
 //-----------------------------------------------------------------------------
 #include "chugin.h"
@@ -58,10 +57,10 @@ std::vector<float> SH(unsigned order_, const float azimuth_, const float zenith_
     for (int order = 0; order <= (int)order_; order++)         // all orders from 0 - desired order
     {
         if (order == 0)
-            result[0] = norms.SN3D(order, 0);                      // Y^0_0 is omnidirectional
+            result[0] = norms.SN3D(order, 0);                // Y^0_0 is omnidirectional
         for (int degree = -order; degree <= order; degree++) // all degrees of current order
         {
-            float n = n3d ? norms.N3D(order, degree) : norms.SN3D(order, degree);                                      // normalization term if n3d bool = TRUE, return N3D else SN3D
+            float n = n3d ? norms.N3D(order, degree) : norms.SN3D(order, degree);                          // normalization term if n3d bool = TRUE, return N3D else SN3D
             float p = (std::assoc_legendref(order, abs(degree), coszeni));                                 // legendre NOTE: degree of legendre is current ambisonic order & order of legendre is current ambisonic degree (very frustrating)
             float r = (degree < 0) ? sinf(abs(degree) * (azimuth_shift)) : cosf(degree * (azimuth_shift)); // degree positive? Re(exp(i*azimuth*degree)) degree negative? Im(exp(i*azimuth*degree))
             result[(order * order) + order + degree] = n * p * r;                                          // place inside vector so it is ordered as Y^0_0, Y^1_-1, Y^1_0, Y^1_1
@@ -75,16 +74,16 @@ void SH(unsigned order_, const float azimuth_, const float zenith_, std::vector<
     float azimuth_shift = (azimuth_ - 90.f) * degree2rad; // shift "perspective" so that azi = 0 and zeni = 0 is a unity vector facing outwards from the listener (vector pointing from roughly the nose forward)
     float zenith_shift = (zenith_ - 90.f) * degree2rad;   // same here
     float coszeni = cosf(zenith_shift);                   // pre calculate cos(zenith)
-    int size = (order_ + 1) * (order_ + 1) + 1;               // pre-compute size of vector to be returned
+    int size = (order_ + 1) * (order_ + 1) + 1;           // pre-compute size of vector to be returned
     if (result.capacity() != size)
-        result.reserve(size);                           // reserve space for vector
+        result.reserve(size);                          // reserve space for vector
     for (int order = 0; order <= (int)order_; order++) // all orders from 0 - desired order
     {
         if (order == 0)
-            result[0] = norms.SN3D(order, 0);                      // Y^0_0 is omnidirectional
+            result[0] = norms.SN3D(order, 0);                // Y^0_0 is omnidirectional
         for (int degree = -order; degree <= order; degree++) // all degrees of current order
         {
-            float n = n3d ? norms.N3D(order, degree) : norms.SN3D(order, degree);                                      // normalization term if n3d bool = TRUE, return N3D else SN3D
+            float n = n3d ? norms.N3D(order, degree) : norms.SN3D(order, degree);                          // normalization term if n3d bool = TRUE, return N3D else SN3D
             float p = (std::assoc_legendref(order, abs(degree), coszeni));                                 // legendre NOTE: degree of legendre is current ambisonic order & order of legendre is current ambisonic degree (very frustrating)
             float r = (degree < 0) ? sinf(abs(degree) * (azimuth_shift)) : cosf(degree * (azimuth_shift)); // degree positive? Re(exp(i*azimuth*degree)) degree negative? Im(exp(i*azimuth*degree))
             result[(order * order) + order + degree] = n * p * r;                                          // place inside vector so it is ordered as Y^0_0, Y^1_-1, Y^1_0, Y^1_1
